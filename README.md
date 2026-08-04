@@ -253,15 +253,5 @@ bh-reminder/
 
 > 注意：此操作会清除所有提醒数据，请提前备份数据库。
 
-### better-sqlite3 编译失败？
-
-确保系统已安装编译工具：
-
-```bash
-# CentOS
-yum install -y python3 make gcc gcc-c++
-
-# Ubuntu/Debian
-apt install -y python3 make g++
-```
+### 官方交流tg群： https://t.me/wkjsGroup
 
