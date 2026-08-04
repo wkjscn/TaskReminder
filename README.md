@@ -57,7 +57,7 @@
 
    services:
      bh-reminder:
-       image: your-registry/bh-reminder:latest
+       image: ghcr.io/wkjscn/taskreminder:latest
        container_name: bh-reminder
        restart: always
        ports:
@@ -83,6 +83,22 @@
    - 密码：`admin123`
 
 > 首次登录后请务必在「设置」页面修改默认密码。
+
+### Docker 命令行方式
+
+如果不使用 docker-compose，也可以直接用 docker 命令：
+
+```bash
+docker pull ghcr.io/wkjscn/taskreminder:latest
+docker run -d \
+  --name bh-reminder \
+  --restart always \
+  -p 3000:3000 \
+  -v $(pwd)/data:/app/data \
+  -v $(pwd)/.env:/app/.env:ro \
+  -e TZ=Asia/Shanghai \
+  ghcr.io/wkjscn/taskreminder:latest
+```
 
 ### 方式二：源码部署
 
