@@ -679,7 +679,7 @@
       .card-body { padding: 4px 0; }
 
       /* Settings card full width */
-      #view-settings .card { max-width: 100% !important; }
+      #view-settings > div > .card { max-width: 100% !important; }
       #view-settings .card-body { padding: 16px !important; }
 
       /* Login page tweaks */
@@ -942,32 +942,63 @@
         <div class="page-header">
           <h3>系统设置</h3>
         </div>
-        <div class="card" style="max-width: 500px;">
-          <div class="card-header">
-            <h4>修改账号密码</h4>
+        <div style="display:flex; gap:24px; align-items:stretch; flex-wrap:wrap;">
+          <!-- 左侧：修改账号密码 -->
+          <div class="card" style="flex:1; min-width:280px; max-width:500px;">
+            <div class="card-header">
+              <h4>修改账号密码</h4>
+            </div>
+            <div class="card-body" style="padding: 24px;">
+              <form id="settingsForm" onsubmit="return saveSettings(event)">
+                <div class="form-group">
+                  <label>当前用户名</label>
+                  <input type="text" id="currentUsername" disabled style="background:#f8fafc;">
+                </div>
+                <div class="form-group">
+                  <label>当前密码（验证身份）</label>
+                  <input type="password" id="currentPassword" required autocomplete="current-password">
+                </div>
+                <div class="form-group">
+                  <label>新用户名（留空则不修改）</label>
+                  <input type="text" id="newUsername" placeholder="输入新用户名">
+                </div>
+                <div class="form-group">
+                  <label>新密码（留空则不修改）</label>
+                  <input type="password" id="newPassword" placeholder="输入新密码" autocomplete="new-password">
+                </div>
+                <div style="margin-top: 20px;">
+                  <button type="submit" class="btn btn-primary">保存设置</button>
+                </div>
+              </form>
+            </div>
           </div>
-          <div class="card-body" style="padding: 24px;">
-            <form id="settingsForm" onsubmit="return saveSettings(event)">
-              <div class="form-group">
-                <label>当前用户名</label>
-                <input type="text" id="currentUsername" disabled style="background:#f8fafc;">
+
+          <!-- 右侧：关于本系统 -->
+          <div class="card" style="flex:1; min-width:280px; max-width:420px;">
+            <div class="card-header">
+              <h4>关于本系统</h4>
+            </div>
+            <div class="card-body" style="padding:24px;">
+              <p style="color:#475569; line-height:1.7; font-size:14px;">
+                一个由AI完全开发的轻量级事项提醒管理系统，支持按间隔天数自动发送提醒通知到 Telegram、邮箱和飞书 Bot。
+              </p>
+              <div style="margin-top:20px;">
+                <h5 style="margin-bottom:10px; color:#334155;">功能特性</h5>
+                <ul style="color:#64748b; font-size:13px; line-height:2; padding-left:20px; margin:0;">
+                  <li>提醒管理：创建/编辑/删除/启停</li>
+                  <li>定时通知：按间隔天数自动发送</li>
+                  <li>多渠道：Telegram / 邮件 / 飞书</li>
+                  <li>每个提醒独立配置通知渠道</li>
+                  <li>通知日志记录，避免重复发送</li>
+                  <li>用户认证，支持修改密码</li>
+                  <li>响应式设计，支持移动端</li>
+                  <li>手动触发 + 下次提醒日期计算</li>
+                </ul>
               </div>
-              <div class="form-group">
-                <label>当前密码（验证身份）</label>
-                <input type="password" id="currentPassword" required autocomplete="current-password">
+              <div style="margin-top:20px; padding-top:16px; border-top:1px solid #e2e8f0; text-align:center;">
+                <a href="https://github.com/wkjscn/TaskReminder" target="_blank" style="color:#3b82f6; font-size:13px; text-decoration:none;">GitHub 仓库 →</a>
               </div>
-              <div class="form-group">
-                <label>新用户名（留空则不修改）</label>
-                <input type="text" id="newUsername" placeholder="输入新用户名">
-              </div>
-              <div class="form-group">
-                <label>新密码（留空则不修改）</label>
-                <input type="password" id="newPassword" placeholder="输入新密码" autocomplete="new-password">
-              </div>
-              <div style="margin-top: 20px;">
-                <button type="submit" class="btn btn-primary">保存设置</button>
-              </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
