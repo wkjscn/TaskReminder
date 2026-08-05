@@ -1,19 +1,24 @@
 # 事项提醒系统
 
-一个完全由Ai开发的轻量级事项提醒管理系统，支持按间隔天数自动发送提醒通知到 Telegram、邮箱和飞书 Bot。
+一个完全由 AI 开发的轻量级事项提醒管理系统，支持 Telegram、Email、飞书 Bot、Bark 四种通知渠道，支持注册登录、用户管理、多时区、多间隔单位、定时与手动触发提醒。
 
 ## 功能特性
 
-- **提醒管理**：创建、编辑、删除、启用/暂停提醒事项
-- **定时通知**：按设定间隔（天数）自动检查并发送提醒
-- **多渠道通知**：
-  - Telegram Bot
-  - 邮件（SMTP）
-  - 飞书 Bot
+- **提醒管理**：创建、编辑、克隆、删除、启用/暂停提醒事项
+- **定时通知**：按设定间隔（分钟/小时/天/月）自动检查并发送提醒
+- **多渠道通知**：Telegram Bot、邮件（SMTP）、飞书 Bot、Bark
 - **每个提醒独立配置**：可为每个提醒单独配置通知渠道，也可使用全局默认配置
+- **事项详细内容**：每条提醒支持填写详细说明，通知时会一并推送
+- **通知历史快照**：发送通知时快照标题和详情，后续编辑不影响历史记录
 - **通知日志**：记录每次通知发送结果，避免重复发送
-- **用户认证**：登录系统保护数据安全，支持修改用户名/密码
-- **响应式设计**：支持移动端访问，卡片式列表展示
+- **用户系统**：
+  - 注册/登录，支持图形验证码
+  - 修改账号密码
+  - 管理员用户管理（查看、编辑、启用/停用、删除）
+  - 按角色数据隔离：普通用户仅能查看自己的提醒
+- **时区设置**：全局时区切换（默认北京时间），所有时间根据设置显示
+- **搜索与分页**：提醒列表与用户列表均支持关键词搜索和分页
+- **响应式设计**：PC 表格视图 / 移动端卡片视图自动切换
 - **手动触发**：支持手动立即发送提醒通知
 - **下次提醒日期**：自动计算并显示下次提醒时间
 
@@ -25,8 +30,8 @@
 | 数据库 | SQLite (better-sqlite3) |
 | 定时任务 | node-cron |
 | 前端 | 原生 HTML/CSS/JavaScript |
-| 通知 | Telegram Bot API / Nodemailer / 飞书开放平台 API |
-| 认证 | bcryptjs + Token |
+| 通知 | Telegram Bot API / Nodemailer / 飞书开放平台 API / Bark API |
+| 认证 | bcryptjs + Token + Session |
 
 ## 快速开始
 
@@ -48,6 +53,25 @@
    LOGIN_USERNAME=admin
    LOGIN_PASSWORD=admin123
 
+   # Telegram Bot 配置（可选）
+   TELEGRAM_BOT_TOKEN=
+   TELEGRAM_CHAT_ID=
+
+   # Email SMTP 配置（可选）
+   SMTP_HOST=
+   SMTP_PORT=465
+   SMTP_USER=
+   SMTP_PASS=
+   SMTP_FROM=
+   SMTP_TO=
+
+   # 飞书 Bot 配置（可选）
+   FEISHU_APP_ID=
+   FEISHU_APP_SECRET=
+   FEISHU_RECEIVE_ID=
+
+   # Bark 配置（可选）
+   BARK_URL=
    ```
 
 2. **创建 docker-compose.yml**
@@ -106,7 +130,7 @@ docker run -d \
 
    ```bash
    git clone https://github.com/wkjscn/TaskReminder.git
-   cd bh-reminder
+   cd TaskReminder
    ```
 
 2. **安装依赖**
@@ -115,7 +139,7 @@ docker run -d \
    npm install
    ```
 
-3. **配置环境变量（设置默认登录密码/端口）**
+3. **配置环境变量**
 
    ```bash
    cp .env.example .env
@@ -171,28 +195,48 @@ pm2 save
 4. 获取 **App ID** 和 **App Secret**
 5. 获取接收者 **open_id**（通讯录中查看用户详情）
 
+### Bark
+
+1. 在 iPhone 上安装 [Bark](https://apps.apple.com/app/bark/id1403753865) App
+2. 打开 Bark 获取推送 URL（格式：`https://api.day.app/{device_key}`）
+3. 填入 `.env` 文件的 `BARK_URL` 或在新建提醒时填写
+4. 支持两种格式：
+   - 完整 URL：`https://api.day.app/abc123`
+   - 仅 device_key：`abc123`
+
 ## 使用说明
 
 ### 创建提醒
 
 1. 登录系统后，在仪表盘点击「新建提醒」
-2. 填写提醒标题、开始日期、间隔天数
-3. 选择通知渠道 Tab（Telegram / 邮件 / 飞书），填写对应配置
-4. 保存即可
+2. 填写提醒标题、事项详细内容（可选）、开始日期时间
+3. 选择间隔单位（分钟/小时/天/月）和间隔数值
+4. 选择通知渠道 Tab（Telegram / 邮件 / 飞书 / Bark），填写对应配置
+5. 保存即可
 
 ### 提醒规则
 
 - 系统每分钟检查一次是否有到期提醒
-- 从开始日期起，每隔「间隔天数」触发一次通知
-- 每个提醒每天最多发送一次通知（避免重复）
+- 从开始日期起，每隔设定间隔（分钟/小时/天/月）触发一次通知
+- 每个提醒每个间隔周期最多发送一次通知（避免重复）
 - 支持手动触发立即发送
+- 支持克隆已有提醒快速创建新提醒
 
 ### 管理功能
 
 - **启用/暂停**：暂停后不再发送通知
 - **编辑**：修改提醒内容和通知配置
+- **克隆**：复制现有提醒，ID 不同，标题加「（副本）」
+- **发送**：手动立即触发通知
+- **日志**：查看通知历史快照
 - **删除**：删除提醒及其通知日志
-- **通知日志**：查看历史发送记录
+
+### 用户管理（仅管理员可见）
+
+- 查看所有注册用户列表
+- 修改用户信息（用户名、密码、角色、状态）
+- 启用/停用用户（停用后无法登录）
+- 删除用户（管理员账号不可删除）
 
 ## API 接口
 
@@ -202,24 +246,55 @@ pm2 save
 Authorization: Bearer <token>
 ```
 
+### 认证相关
+
 | 方法 | 路径 | 说明 |
 |------|------|------|
 | POST | `/api/auth/login` | 登录 |
 | POST | `/api/auth/logout` | 退出登录 |
-| GET | `/api/auth/me` | 获取当前用户 |
+| GET | `/api/auth/captcha` | 获取图形验证码 |
+| POST | `/api/auth/register` | 注册新账号 |
+| GET | `/api/auth/me` | 获取当前用户信息 |
 | PUT | `/api/auth/settings` | 修改用户名/密码 |
-| GET | `/api/reminders` | 获取提醒列表 |
+
+### 提醒管理
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/reminders` | 获取提醒列表（支持按用户筛选） |
 | POST | `/api/reminders` | 创建提醒 |
 | PUT | `/api/reminders/:id` | 更新提醒 |
 | DELETE | `/api/reminders/:id` | 删除提醒 |
-| PATCH | `/api/reminders/:id/toggle` | 启用/暂停 |
-| POST | `/api/reminders/:id/trigger` | 手动触发通知 |
-| GET | `/api/logs/:reminderId` | 获取通知日志 |
+| POST | `/api/reminders/:id/toggle` | 启用/暂停 |
+| POST | `/api/reminders/:id/fire` | 手动触发通知 |
+| GET | `/api/reminders/:id/logs` | 获取指定提醒的通知日志 |
+
+### 通知日志
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/logs` | 获取全部通知日志（按用户权限过滤） |
+
+### 用户管理（管理员）
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/users` | 获取用户列表 |
+| PUT | `/api/users/:id` | 更新用户信息 |
+| POST | `/api/users/:id/toggle-status` | 启用/停用用户 |
+| DELETE | `/api/users/:id` | 删除用户 |
+
+### 系统设置
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/settings` | 获取系统设置 |
+| PUT | `/api/settings` | 更新系统设置（管理员） |
 
 ## 项目结构
 
 ```
-bh-reminder/
+TaskReminder/
 ├── src/
 │   ├── index.ts          # 应用入口
 │   ├── db.ts             # 数据库操作
@@ -229,7 +304,8 @@ bh-reminder/
 │   ├── notify/
 │   │   ├── telegram.ts   # Telegram 通知
 │   │   ├── email.ts      # 邮件通知
-│   │   └── feishu.ts     # 飞书通知
+│   │   ├── feishu.ts     # 飞书通知
+│   │   └── bark.ts       # Bark 通知
 │   └── public/
 │       └── index.html    # 前端页面
 ├── Dockerfile
@@ -253,5 +329,21 @@ bh-reminder/
 
 > 注意：此操作会清除所有提醒数据，请提前备份数据库。
 
-### 官方交流TG群： https://t.me/wkjsGroup
+### 更新 Docker 镜像
 
+```bash
+docker compose pull
+docker compose up -d
+```
+
+如遇缓存问题，可先清理旧镜像：
+
+```bash
+docker image rm ghcr.io/wkjscn/taskreminder:latest
+docker compose pull
+docker compose up -d
+```
+
+## 官方交流TG群
+
+https://t.me/wkjsGroup
