@@ -104,10 +104,8 @@
    打开浏览器访问 `http://服务器IP:3000`，使用默认账号登录：
    - 用户名：`admin`
    - 密码：`admin123`
-   
-5. **设置反向代理**
 
-   设置域名反向代理，端口3000
+> 首次登录后请务必在「设置」页面修改默认密码。
 
 ### Docker 命令行方式
 
@@ -171,97 +169,6 @@ npm run build
 pm2 start dist/index.js --name bh-reminder
 pm2 save
 ```
-
-### 方式四：宝塔面板部署
-
-#### 方法 A：Docker 管理器部署（推荐）
-
-1. 登录宝塔面板，进入 **软件商店** → 搜索安装 **Docker 管理器**
-
-2. 进入 **Docker 管理器** → 点击 **镜像** → 拉取镜像：
-   ```
-   ghcr.io/wkjscn/taskreminder:latest
-   ```
-
-3. 点击 **容器** → 添加容器，配置如下：
-   - **容器名称**：`bh-reminder`
-   - **镜像**：选择刚拉取的镜像
-   - **端口映射**：`3000` → 宿主机端口（如 `3000`）
-   - **挂载目录**：
-     - `/app/data` → 宿主机目录（如 `/www/wwwroot/bh/data`）
-     - `/app/.env` → 宿主机 `.env` 文件（如 `/www/wwwroot/bh/.env`）
-   - **环境变量**：
-     - `TZ` = `Asia/Shanghai`
-     - `NODE_ENV` = `production`
-   - **重启策略**：`always`
-
-4. 创建 `.env` 文件到 `/www/wwwroot/bh/.env`：
-   ```env
-   PORT=3000
-   LOGIN_USERNAME=admin
-   LOGIN_PASSWORD=admin123
-   # 按需添加通知渠道配置
-   ```
-
-5. 点击 **运行** 启动容器
-
-#### 方法 B：Node.js 项目管理器部署
-
-1. 登录宝塔面板，进入 **软件商店** → 搜索安装 **Node.js 项目管理器**
-
-2. 进入 **Node.js 项目管理器** → 点击 **添加项目**
-
-3. 项目配置：
-   - **项目名称**：`bh-reminder`
-   - **项目路径**：`/www/wwwroot/bh`
-   - **Node 版本**：选择 18 或以上
-   - **运行模式**：`生产环境`
-   - **启动文件**：`dist/index.js`
-   - **端口**：`3000`
-
-4. 上传项目代码到 `/www/wwwroot/bh`：
-   ```bash
-   cd /www/wwwroot
-   git clone https://github.com/wkjscn/TaskReminder.git bh
-   cd bh
-   npm install
-   npm run build
-   ```
-
-5. 创建 `.env` 文件并配置参数（参考 `.env.example`）
-
-6. 在宝塔 **网站** 中添加站点，设置反向代理到 `127.0.0.1:3000`
-
-7. 在 **安全** → **防火墙** 中放行端口 `3000`（如需直接访问）
-
-#### 方法 C：纯源码部署（最简单，无需 Docker/Node 管理器）
-
-1. 宝塔 **终端** 执行：
-   ```bash
-   cd /www/wwwroot
-   git clone https://github.com/wkjscn/TaskReminder.git bh
-   cd bh
-   npm install
-   npm run build
-   ```
-
-2. 创建 `.env` 文件：
-   ```bash
-   cp .env.example .env
-   vi .env  # 编辑配置
-   ```
-
-3. 后台运行：
-   ```bash
-   nohup node dist/index.js > /www/wwwroot/bh/app.log 2>&1 &
-   ```
-
-4. 设置开机自启（可选，编辑 `/etc/rc.local`）：
-   ```bash
-   echo "cd /www/wwwroot/bh && nohup node dist/index.js > /www/wwwroot/bh/app.log 2>&1 &" >> /etc/rc.local
-   ```
-
-5. 配置宝塔反向代理（**网站** → 添加站点 → 反向代理 → `http://127.0.0.1:3000`）
 
 ## 通知渠道配置
 
@@ -329,59 +236,6 @@ pm2 save
 - 修改用户信息（用户名、密码、角色、状态）
 - 启用/停用用户（停用后无法登录）
 - 删除用户（管理员账号不可删除）
-
-## API 接口
-
-所有 `/api` 接口（除 `/api/auth/*`）需要携带 Token 认证：
-
-```
-Authorization: Bearer <token>
-```
-
-### 认证相关
-
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| POST | `/api/auth/login` | 登录 |
-| POST | `/api/auth/logout` | 退出登录 |
-| GET | `/api/auth/captcha` | 获取图形验证码 |
-| POST | `/api/auth/register` | 注册新账号 |
-| GET | `/api/auth/me` | 获取当前用户信息 |
-| PUT | `/api/auth/settings` | 修改用户名/密码 |
-
-### 提醒管理
-
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| GET | `/api/reminders` | 获取提醒列表（支持按用户筛选） |
-| POST | `/api/reminders` | 创建提醒 |
-| PUT | `/api/reminders/:id` | 更新提醒 |
-| DELETE | `/api/reminders/:id` | 删除提醒 |
-| POST | `/api/reminders/:id/toggle` | 启用/暂停 |
-| POST | `/api/reminders/:id/fire` | 手动触发通知 |
-| GET | `/api/reminders/:id/logs` | 获取指定提醒的通知日志 |
-
-### 通知日志
-
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| GET | `/api/logs` | 获取全部通知日志（按用户权限过滤） |
-
-### 用户管理（管理员）
-
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| GET | `/api/users` | 获取用户列表 |
-| PUT | `/api/users/:id` | 更新用户信息 |
-| POST | `/api/users/:id/toggle-status` | 启用/停用用户 |
-| DELETE | `/api/users/:id` | 删除用户 |
-
-### 系统设置
-
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| GET | `/api/settings` | 获取系统设置 |
-| PUT | `/api/settings` | 更新系统设置（管理员） |
 
 ## 项目结构
 
