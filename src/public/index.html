@@ -131,25 +131,6 @@
       align-items: center;
       gap: 16px;
     }
-    .config-status {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 500;
-      background: #f8fafc;
-      color: #475569;
-      border: 1px solid #e2e8f0;
-    }
-    .dot { width: 8px; height: 8px; border-radius: 50%; }
-    .dot.green { background: #10b981; box-shadow: 0 0 6px rgba(16,185,129,0.4); }
-    .dot.red { background: #ef4444; }
-    .topbar-actions {
-      display: flex;
-      gap: 8px;
-    }
 
     /* Content */
     .content {
@@ -228,6 +209,59 @@
     }
     .card-body { padding: 8px 0; }
 
+    /* Desktop / Mobile visibility */
+    .desktop-only { display: block; }
+    .mobile-only { display: none; }
+
+    /* Pagination */
+    .pagination-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 8px;
+    }
+    .pagination-info {
+      font-size: 13px;
+      color: #64748b;
+    }
+    .pagination-controls {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .pagination-controls button {
+      min-width: 32px;
+      height: 32px;
+      padding: 0 10px;
+      border: 1px solid #e2e8f0;
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      color: #475569;
+      transition: all 0.15s;
+    }
+    .pagination-controls button:hover:not(:disabled) {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+    .pagination-controls button.active {
+      background: #3b82f6;
+      color: white;
+      border-color: #3b82f6;
+    }
+    .pagination-controls button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .pagination-ellipsis {
+      padding: 0 6px;
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
     /* Table */
     table {
       width: 100%;
@@ -258,6 +292,18 @@
       font-weight: 600;
       color: #1e293b;
     }
+    .reminder-desc {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 4px;
+      line-height: 1.4;
+      max-width: 280px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
     .reminder-meta {
       font-size: 12px;
       color: #94a3b8;
@@ -276,6 +322,7 @@
     .tag-blue { background: #dbeafe; color: #1e40af; }
     .tag-green { background: #dcfce7; color: #166534; }
     .tag-slate { background: #f1f5f9; color: #475569; }
+    .tag-amber { background: #fef3c7; color: #92400e; }
 
     .status-badge {
       display: inline-flex;
@@ -322,14 +369,9 @@
     .btn-warning:hover { background: #d97706; }
     .btn-secondary { background: #64748b; color: #fff; }
     .btn-secondary:hover { background: #475569; }
-    .btn-ghost {
-      background: transparent;
-      color: #6366f1;
-      padding: 4px 10px;
-    }
-    .btn-ghost:hover { background: #eef2ff; }
+    .btn-clone { background: #0d9488; color: #fff; }
+    .btn-clone:hover { background: #0f766e; }
     .btn-sm { padding: 5px 10px; font-size: 12px; }
-    .btn-icon { padding: 6px; font-size: 14px; }
 
     /* Empty */
     .empty-state {
@@ -570,6 +612,16 @@
       flex: 1;
       word-break: break-word;
     }
+    .reminder-card .rc-desc {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 4px;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
     .reminder-card .rc-id {
       font-size: 11px;
       color: #94a3b8;
@@ -616,6 +668,26 @@
       font-size: 12px;
     }
 
+    /* User card styles */
+    .reminder-card .card-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #f8fafc;
+      font-size: 13px;
+    }
+    .reminder-card .card-row:last-of-type { border-bottom: none; }
+    .reminder-card .card-label { color: #94a3b8; font-size: 12px; }
+    .reminder-card .card-value { color: #334155; font-weight: 500; text-align: right; }
+    .reminder-card .card-actions {
+      display: flex;
+      gap: 6px;
+      padding-top: 10px;
+      border-top: 1px solid #f1f5f9;
+    }
+    .reminder-card .card-actions .btn { flex: 1; padding: 8px 4px; font-size: 12px; justify-content: center; }
+
     @media (max-width: 768px) {
       .sidebar { transform: translateX(-100%); transition: transform 0.3s; width: 260px; }
       .sidebar.open { transform: translateX(0); }
@@ -628,8 +700,16 @@
       .topbar-left .breadcrumb { font-size: 11px; }
 
       /* Hide table on mobile, show cards */
-      .reminders-table-wrap { display: none; }
+      .reminders-table-wrap .card-body { display: none; }
+      .reminders-table-wrap #remindersPagination { display: none; }
       .reminder-cards { display: flex; }
+
+      /* Users management: hide table, show cards */
+      .desktop-only { display: none !important; }
+      .mobile-only { display: block !important; }
+      #usersCardsBody.mobile-only { display: flex !important; }
+      #userSearchInput { width: 100% !important; flex: 1; box-sizing: border-box; }
+      #view-users .card-header h4 { display: none; }
 
       /* Stats grid: 3 in a row on mobile */
       .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
@@ -648,6 +728,13 @@
       .page-header { flex-wrap: wrap; gap: 10px; }
       .page-header h3 { font-size: 16px; }
       .page-header .btn { padding: 8px 14px; font-size: 13px; }
+
+      /* Reminder search on mobile - same line */
+      #remindersTableWrap .page-header h3 { display: none; }
+      #remindersTableWrap .page-header > div:first-of-type { display: none; }
+      #reminderSearchInput { flex: 1; min-width: 0; }
+      #userFilter { width: auto; flex-shrink: 0; padding: 6px 8px; font-size: 12px; }
+      #remindersTableWrap .page-header { flex-wrap: nowrap; }
 
       /* Modal full width on mobile */
       .modal-overlay { padding: 0; }
@@ -804,6 +891,38 @@
         </div>
         <button type="submit" class="btn btn-primary">登 录</button>
       </form>
+      <div style="text-align:center; margin-top:16px;">
+        <a href="javascript:void(0)" onclick="showRegister()" style="color:#3b82f6; font-size:14px; text-decoration:none;">没有账号？立即注册</a>
+      </div>
+    </div>
+
+    <!-- 注册卡片 -->
+    <div class="login-card" id="registerCard" style="display:none;">
+      <div class="logo">📝</div>
+      <h2>注册账号</h2>
+      <div class="sub">填写邮箱和密码注册</div>
+      <div class="login-error" id="registerError"></div>
+      <form id="registerForm" onsubmit="return doRegister(event)">
+        <div class="form-group">
+          <label>邮箱</label>
+          <input type="email" id="registerEmail" placeholder="请输入邮箱" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label>密码</label>
+          <input type="password" id="registerPassword" placeholder="至少 6 位密码" required autocomplete="new-password" minlength="6">
+        </div>
+        <div class="form-group">
+          <label>验证码</label>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <input type="text" id="captchaCode" placeholder="输入验证码" required maxlength="4" style="flex:1; text-transform:uppercase;">
+            <div id="captchaImage" onclick="refreshCaptcha()" style="cursor:pointer; flex-shrink:0; border:1px solid #e2e8f0; border-radius:6px; overflow:hidden; height:40px; display:flex; align-items:center;" title="点击刷新"></div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">注 册</button>
+      </form>
+      <div style="text-align:center; margin-top:16px;">
+        <a href="javascript:void(0)" onclick="showLogin()" style="color:#64748b; font-size:14px; text-decoration:none;">已有账号？返回登录</a>
+      </div>
     </div>
   </div>
 
@@ -829,14 +948,18 @@
         <span class="icon">📜</span>
         <span>通知日志</span>
       </a>
+      <a class="nav-item" data-view="users" id="navUsers" style="display:none;">
+        <span class="icon">👥</span>
+        <span>用户管理</span>
+      </a>
 
       <div class="nav-section">系统</div>
       <a class="nav-item" data-view="settings">
         <span class="icon">⚙️</span>
         <span>设置</span>
       </a>
-      <a class="nav-item" onclick="doLogout()">
-        <span class="icon">🚪</span>
+      <a class="nav-item" id="navLogout">
+        <span class="icon">↩</span>
         <span>退出登录</span>
       </a>
     </nav>
@@ -852,7 +975,7 @@
     </div>
   </aside>
 
-  <main class="main">
+  <main class="main" id="mainContent">
     <div class="topbar">
       <div class="topbar-left" style="display:flex; align-items:center; gap:12px;">
         <button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">☰</button>
@@ -892,20 +1015,26 @@
           </div>
         </div>
 
-        <div class="page-header">
-          <h3>事项提醒管理</h3>
-          <button class="btn btn-primary" onclick="openCreateModal()">
-            <span>＋</span> 新建提醒
-          </button>
-        </div>
-
         <div class="card reminders-table-wrap">
+          <div class="page-header" style="padding: 16px 20px; border-bottom: 1px solid #f1f5f9; margin-bottom: 0; flex-wrap: wrap; gap: 10px;">
+            <h3 style="margin:0;">事项提醒管理</h3>
+            <div style="flex:1; min-width:0;"></div>
+            <input type="text" id="reminderSearchInput" placeholder="搜索事项..." style="padding:6px 12px; border:1px solid #e2e8f0; border-radius:6px; font-size:13px; width:200px; outline:none; transition:border-color 0.2s;" oninput="filterReminders(this.value)">
+            <select id="userFilter" style="padding:6px 12px; border:1px solid #e2e8f0; border-radius:6px; font-size:13px; outline:none; background:white; display:none;" onchange="filterByUser(this.value)">
+              <option value="all">全部用户</option>
+              <option value="mine">仅看自己</option>
+            </select>
+            <button class="btn btn-primary" onclick="openCreateModal()">
+              <span>＋</span> 新建提醒
+            </button>
+          </div>
           <div class="card-body">
             <table id="remindersTable">
               <thead>
                 <tr>
                   <th>事项</th>
-                  <th>开始日期</th>
+                  <th id="ownerTh" style="display:none;">所属用户</th>
+                  <th>开始时间</th>
                   <th>间隔</th>
                   <th>下次提醒</th>
                   <th>状态</th>
@@ -914,12 +1043,13 @@
                   <th>操作</th>
                 </tr>
               </thead>
-              <tbody></tbody>
+              <tbody id="remindersTableBody"></tbody>
             </table>
           </div>
         </div>
 
         <div class="reminder-cards" id="reminderCards"></div>
+        <div id="remindersPagination" class="pagination-bar" style="display:none;"></div>
       </div>
 
       <!-- Logs View -->
@@ -934,6 +1064,7 @@
               <p>加载中...</p>
             </div>
           </div>
+          <div id="logsPagination" class="pagination-bar" style="display:none;"></div>
         </div>
       </div>
 
@@ -942,62 +1073,188 @@
         <div class="page-header">
           <h3>系统设置</h3>
         </div>
-        <div style="display:flex; gap:24px; align-items:stretch; flex-wrap:wrap;">
-          <!-- 左侧：修改账号密码 -->
-          <div class="card" style="flex:1; min-width:280px; max-width:500px;">
-            <div class="card-header">
-              <h4>修改账号密码</h4>
+        <!-- 修改账号密码 -->
+        <div class="card">
+          <div class="card-header">
+            <h4>修改账号密码</h4>
+          </div>
+          <div class="card-body" style="padding: 24px;">
+            <form id="settingsForm" onsubmit="return saveSettings(event)">
+              <div class="form-group">
+                <label>当前用户名</label>
+                <input type="text" id="currentUsername" disabled style="background:#f8fafc;">
+              </div>
+              <div class="form-group">
+                <label>当前密码（验证身份）</label>
+                <input type="password" id="currentPassword" required autocomplete="current-password">
+              </div>
+              <div class="form-group">
+                <label>新用户名（留空则不修改）</label>
+                <input type="text" id="newUsername" placeholder="输入新用户名">
+              </div>
+              <div class="form-group">
+                <label>新密码（留空则不修改）</label>
+                <input type="password" id="newPassword" placeholder="输入新密码" autocomplete="new-password">
+              </div>
+              <div style="margin-top: 20px;">
+                <button type="submit" class="btn btn-primary">保存设置</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- 时区设置 -->
+        <div class="card" style="margin-top:24px;">
+          <div class="card-header">
+            <h4>时区设置</h4>
+          </div>
+          <div class="card-body" style="padding: 24px;">
+            <div class="form-group">
+              <label>系统时区</label>
+              <select id="timezoneSelect" style="max-width:300px;">
+                <option value="Asia/Shanghai">北京时间 (UTC+8)</option>
+                <option value="Asia/Tokyo">东京时间 (UTC+9)</option>
+                <option value="Asia/Singapore">新加坡时间 (UTC+8)</option>
+                <option value="Asia/Kolkata">印度时间 (UTC+5:30)</option>
+                <option value="Asia/Dubai">迪拜时间 (UTC+4)</option>
+                <option value="Europe/London">伦敦时间 (UTC+0)</option>
+                <option value="Europe/Paris">巴黎时间 (UTC+1)</option>
+                <option value="Europe/Moscow">莫斯科时间 (UTC+3)</option>
+                <option value="America/New_York">纽约时间 (UTC-5)</option>
+                <option value="America/Chicago">芝加哥时间 (UTC-6)</option>
+                <option value="America/Denver">丹佛时间 (UTC-7)</option>
+                <option value="America/Los_Angeles">洛杉矶时间 (UTC-8)</option>
+                <option value="America/Sao_Paulo">圣保罗时间 (UTC-3)</option>
+                <option value="Australia/Sydney">悉尼时间 (UTC+10)</option>
+                <option value="Pacific/Auckland">奥克兰时间 (UTC+12)</option>
+                <option value="UTC">UTC (UTC+0)</option>
+              </select>
+              <small style="color:#94a3b8; font-size:12px; margin-top:4px;">全局时间显示将根据此时区转换，默认为北京时间</small>
             </div>
-            <div class="card-body" style="padding: 24px;">
-              <form id="settingsForm" onsubmit="return saveSettings(event)">
-                <div class="form-group">
-                  <label>当前用户名</label>
-                  <input type="text" id="currentUsername" disabled style="background:#f8fafc;">
-                </div>
-                <div class="form-group">
-                  <label>当前密码（验证身份）</label>
-                  <input type="password" id="currentPassword" required autocomplete="current-password">
-                </div>
-                <div class="form-group">
-                  <label>新用户名（留空则不修改）</label>
-                  <input type="text" id="newUsername" placeholder="输入新用户名">
-                </div>
-                <div class="form-group">
-                  <label>新密码（留空则不修改）</label>
-                  <input type="password" id="newPassword" placeholder="输入新密码" autocomplete="new-password">
-                </div>
-                <div style="margin-top: 20px;">
-                  <button type="submit" class="btn btn-primary">保存设置</button>
-                </div>
-              </form>
+            <div style="margin-top: 16px;">
+              <button type="button" class="btn btn-primary" onclick="saveTimezoneBtn()">保存时区</button>
             </div>
           </div>
+        </div>
 
-          <!-- 右侧：关于本系统 -->
-          <div class="card" style="flex:1; min-width:280px; max-width:420px;">
-            <div class="card-header">
-              <h4>关于本系统</h4>
+        <!-- 关于本系统 -->
+        <div class="card" style="margin-top:24px;">
+          <div class="card-header">
+            <h4>关于本系统</h4>
+          </div>
+          <div class="card-body" style="padding:24px;">
+            <p style="color:#475569; line-height:1.7; font-size:14px;">
+              一个由AI完全开发的轻量级事项提醒管理系统，支持按间隔天数自动发送提醒通知到 Telegram、邮箱、飞书、Bark。
+            </p>
+            <div style="margin-top:20px;">
+              <h5 style="margin-bottom:10px; color:#334155;">功能特性</h5>
+              <ul style="color:#64748b; font-size:13px; line-height:2; padding-left:20px; margin:0;">
+                <li>提醒管理：创建/编辑/删除/启停/克隆</li>
+                <li>定时发送：可按间分，时，天，月间隔自动发送</li>
+                <li>多渠道：Telegram / 邮件 / 飞书 /Bark</li>
+                <li>支持独立配置通知渠道</li>
+                <li>支持多用户登录使用系统</li>
+                <li>响应式设计，支持移动端</li>
+              </ul>
             </div>
-            <div class="card-body" style="padding:24px;">
-              <p style="color:#475569; line-height:1.7; font-size:14px;">
-                一个由AI完全开发的轻量级事项提醒管理系统，支持按间隔天数自动发送提醒通知到 Telegram、邮箱和飞书 Bot。
-              </p>
-              <div style="margin-top:20px;">
-                <h5 style="margin-bottom:10px; color:#334155;">功能特性</h5>
-                <ul style="color:#64748b; font-size:13px; line-height:2; padding-left:20px; margin:0;">
-                  <li>提醒管理：创建/编辑/删除/启停</li>
-                  <li>定时通知：按间隔天数自动发送</li>
-                  <li>多渠道：Telegram / 邮件 / 飞书</li>
-                  <li>每个提醒独立配置通知渠道</li>
-                  <li>通知日志记录，避免重复发送</li>
-                  <li>用户认证，支持修改密码</li>
-                  <li>响应式设计，支持移动端</li>
-                  <li>手动触发 + 下次提醒日期计算</li>
-                </ul>
+            <div style="margin-top:20px; padding-top:16px; border-top:1px solid #e2e8f0; text-align:center;">
+              <a href="https://github.com/wkjscn/TaskReminder" target="_blank" style="color:#3b82f6; font-size:13px; text-decoration:none;">GitHub 仓库 →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Users View -->
+      <div id="view-users" style="display:none;">
+        <div class="page-header">
+          <h3>用户管理</h3>
+        </div>
+        <div class="card">
+          <div class="card-header" style="display:flex; align-items:center; justify-content:space-between;">
+            <h4>已注册用户</h4>
+            <input type="text" id="userSearchInput" placeholder="搜索用户名/邮箱..." style="padding:6px 12px; border:1px solid #e2e8f0; border-radius:6px; font-size:13px; width:220px; outline:none; transition:border-color 0.2s;" oninput="filterUsers(this.value)">
+          </div>
+          <div class="card-body" style="padding:0;">
+            <div class="table-wrap desktop-only">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>用户名/邮箱</th>
+                    <th>角色</th>
+                    <th>状态</th>
+                    <th>提醒数量</th>
+                    <th>注册时间</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTableBody"></tbody>
+              </table>
+            </div>
+            <div class="reminder-cards mobile-only" id="usersCardsBody"></div>
+            <div id="usersPagination" class="pagination-bar" style="display:none;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Edit Modal -->
+      <div class="modal-overlay" id="userModal" style="display:none;">
+        <div class="modal">
+          <div class="modal-header">
+            <h3>编辑用户</h3>
+            <button class="modal-close" onclick="closeUserModal()">✕</button>
+          </div>
+          <div class="modal-body">
+            <form id="userForm" onsubmit="return saveUser(event)">
+              <input type="hidden" id="editUserId" value="">
+              <div class="form-group">
+                <label>用户名/邮箱</label>
+                <input type="text" id="editUserUsername" required>
               </div>
-              <div style="margin-top:20px; padding-top:16px; border-top:1px solid #e2e8f0; text-align:center;">
-                <a href="https://github.com/wkjscn/TaskReminder" target="_blank" style="color:#3b82f6; font-size:13px; text-decoration:none;">GitHub 仓库 →</a>
+              <div class="form-group">
+                <label>新密码（留空则不修改）</label>
+                <input type="password" id="editUserPassword" placeholder="输入新密码" autocomplete="new-password">
               </div>
+              <div class="form-group">
+                <label>角色</label>
+                <select id="editUserRole">
+                  <option value="user">普通用户</option>
+                  <option value="admin">管理员</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>状态</label>
+                <select id="editUserStatus">
+                  <option value="active">正常</option>
+                  <option value="disabled">停用</option>
+                </select>
+              </div>
+              <div style="display:flex; gap:10px; margin-top:20px;">
+                <button type="submit" class="btn btn-primary">保存</button>
+                <button type="button" class="btn" onclick="closeUserModal()" style="background:#f1f5f9;">取消</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete User Confirm Modal -->
+      <div class="modal-overlay" id="deleteUserModal" style="display:none;">
+        <div class="modal" style="max-width:400px;">
+          <div class="modal-header">
+            <h3>确认删除</h3>
+            <button class="modal-close" onclick="closeDeleteUserModal()">✕</button>
+          </div>
+          <div class="modal-body">
+            <p style="color:#475569; line-height:1.7;">
+              确定要删除用户 <strong id="deleteUserName"></strong> 吗？
+            </p>
+            <p style="color:#ef4444; font-size:13px; margin-top:10px;">
+              ⚠️ 该用户的所有提醒事项和通知日志将被一并删除，此操作不可撤销。
+            </p>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+              <button class="btn btn-danger" onclick="confirmDeleteUser()" style="background:#ef4444; color:white;">确认删除</button>
+              <button type="button" class="btn" onclick="closeDeleteUserModal()" style="background:#f1f5f9;">取消</button>
             </div>
           </div>
         </div>
@@ -1020,14 +1277,26 @@
             <label>事项标题</label>
             <input type="text" id="title" placeholder="例如：Ctexcel保号提醒" required>
           </div>
+          <div class="form-group">
+            <label>详细内容 <span style="color:#94a3b8; font-weight:normal;">（选填）</span></label>
+            <textarea id="description" rows="3" placeholder="例如：需要充值100元话费，确保号码不停机..."></textarea>
+          </div>
           <div class="form-row">
             <div class="form-group">
-              <label>开始日期</label>
-              <input type="date" id="start_date" required>
+              <label>开始时间</label>
+              <input type="datetime-local" id="start_date" required>
             </div>
             <div class="form-group">
-              <label>间隔天数</label>
-              <input type="number" id="interval_days" min="1" max="3650" placeholder="例如：7" required>
+              <label>间隔周期</label>
+              <div style="display:flex; gap:8px;">
+                <input type="number" id="interval_days" min="1" max="3650" placeholder="例如：7" required style="flex:1;">
+                <select id="interval_unit" style="width:90px;" onchange="onIntervalUnitChange()">
+                  <option value="minutes">分钟</option>
+                  <option value="hours">小时</option>
+                  <option value="days" selected>天</option>
+                  <option value="months">月</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -1037,6 +1306,7 @@
               <button type="button" class="tab active" data-tab="telegram">Telegram</button>
               <button type="button" class="tab" data-tab="email">Email</button>
               <button type="button" class="tab" data-tab="feishu">飞书 Bot</button>
+              <button type="button" class="tab" data-tab="bark">Bark</button>
             </div>
 
             <div class="tab-panel active" data-panel="telegram">
@@ -1107,6 +1377,17 @@
                 <input type="text" id="feishu_receive_id" placeholder="留空则使用全局配置">
               </div>
             </div>
+
+            <div class="tab-panel" data-panel="bark">
+              <div class="tab-help">
+                <div class="tab-help-title">📖 配置说明</div>
+                <div class="tab-help-body">Bark 是 iOS 平台的通知推送工具，需在 iPhone 上安装 Bark App 获取推送 URL。支持两种格式：<br>1. 完整 URL: <code>https://api.day.app/{device_key}</code><br>2. 仅key: <code>abc123</code></div>
+              </div>
+              <div class="form-group">
+                <label>Bark 推送 URL</label>
+                <input type="text" id="bark_url" placeholder="例如：https://api.day.app/abc123 或 abc123">
+              </div>
+            </div>
           </div>
         </form>
       </div>
@@ -1125,6 +1406,7 @@
         <button class="modal-close" onclick="closeLogsModal()">✕</button>
       </div>
       <div class="modal-body" id="logsList" style="max-height: 400px; overflow-y: auto;"></div>
+      <div id="logsModalPagination" class="pagination-bar" style="display:none; padding: 8px 16px;"></div>
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeLogsModal()">关闭</button>
       </div>
@@ -1133,6 +1415,94 @@
 
   <script>
     let editingId = null;
+    let systemTimezone = 'Asia/Shanghai'; // 全局时区设置，默认北京时区
+
+    // ===== 时区工具函数 =====
+    // 北京时间(UTC+8)字符串 → 配置时区显示字符串
+    function formatTime(dateStr) {
+      if (!dateStr) return '--';
+      const match = dateStr.match(/(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})(?::(\d{2}))?/);
+      if (!match) return dateStr;
+      // 解析为北京时间(UTC+8)对应的UTC时间戳
+      const utcMs = Date.UTC(
+        parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]),
+        parseInt(match[4]), parseInt(match[5]), parseInt(match[6] || '0')
+      ) - 8 * 3600 * 1000;
+      // 在配置时区中格式化
+      const d = new Date(utcMs);
+      const parts = new Intl.DateTimeFormat('zh-CN', {
+        timeZone: systemTimezone,
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: match[6] ? '2-digit' : undefined,
+        hour12: false
+      }).formatToParts(d);
+      const get = type => parts.find(p => p.type === type)?.value || '';
+      let result = `${get('year')}-${get('month')}-${get('day')} ${get('hour')}:${get('minute')}`;
+      if (match[6]) result += `:${get('second')}`;
+      return result;
+    }
+
+    // 配置时区的datetime-local值 → 北京时间字符串(用于存储)
+    function tzToBeijing(dateStr) {
+      if (!dateStr) return dateStr;
+      const match = dateStr.match(/(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})/);
+      if (!match) return dateStr;
+      const y = parseInt(match[1]), mo = parseInt(match[2]) - 1, d = parseInt(match[3]);
+      const h = parseInt(match[4]), mi = parseInt(match[5]);
+      // 将输入视为配置时区的时间，计算对应的UTC时间戳
+      const fakeUtc = Date.UTC(y, mo, d, h, mi);
+      // 获取该时刻配置时区与UTC的偏移量（分钟）
+      const tzParts = new Intl.DateTimeFormat('en-US', {
+        timeZone: systemTimezone, hour12: false,
+        year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+      }).formatToParts(new Date(fakeUtc));
+      const utcParts = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'UTC', hour12: false,
+        year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+      }).formatToParts(new Date(fakeUtc));
+      const gp = (parts, type) => parseInt(parts.find(p => p.type === type)?.value || '0', 10);
+      const tzAsMs = Date.UTC(gp(tzParts, 'year'), gp(tzParts, 'month') - 1, gp(tzParts, 'day'),
+        gp(tzParts, 'hour') === 24 ? 0 : gp(tzParts, 'hour'), gp(tzParts, 'minute'));
+      const utcAsMs = Date.UTC(gp(utcParts, 'year'), gp(utcParts, 'month') - 1, gp(utcParts, 'day'),
+        gp(utcParts, 'hour') === 24 ? 0 : gp(utcParts, 'hour'), gp(utcParts, 'minute'));
+      const offsetMs = tzAsMs - utcAsMs;
+      const actualUtc = fakeUtc - offsetMs;
+      // 转换为北京时间(UTC+8)
+      const bj = new Date(actualUtc + 8 * 3600 * 1000);
+      return bj.getUTCFullYear() + '-' +
+        String(bj.getUTCMonth() + 1).padStart(2, '0') + '-' +
+        String(bj.getUTCDate()).padStart(2, '0') + 'T' +
+        String(bj.getUTCHours()).padStart(2, '0') + ':' +
+        String(bj.getUTCMinutes()).padStart(2, '0');
+    }
+
+    // 北京时间字符串 → 配置时区的datetime-local值(用于表单显示)
+    function beijingToTz(dateStr) {
+      if (!dateStr) return '';
+      const match = dateStr.match(/(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})/);
+      if (!match) return dateStr;
+      const utcMs = Date.UTC(
+        parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]),
+        parseInt(match[4]), parseInt(match[5])
+      ) - 8 * 3600 * 1000;
+      const d = new Date(utcMs);
+      const parts = new Intl.DateTimeFormat('zh-CN', {
+        timeZone: systemTimezone, hour12: false,
+        year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+      }).formatToParts(d);
+      const get = type => parts.find(p => p.type === type)?.value || '';
+      return `${get('year')}-${get('month')}-${get('day')}T${get('hour')}:${get('minute')}`;
+    }
+
+    // 获取配置时区的当前时间(用于datetime-local默认值)
+    function nowInTz() {
+      const parts = new Intl.DateTimeFormat('zh-CN', {
+        timeZone: systemTimezone, hour12: false,
+        year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+      }).formatToParts(new Date());
+      const get = type => parts.find(p => p.type === type)?.value || '';
+      return `${get('year')}-${get('month')}-${get('day')}T${get('hour')}:${get('minute')}`;
+    }
 
     // Tab 切换
     document.querySelectorAll('.tab').forEach(tab => {
@@ -1149,6 +1519,10 @@
     document.querySelectorAll('.nav-item').forEach(item => {
       item.addEventListener('click', (e) => {
         e.preventDefault();
+        if (item.id === 'navLogout') {
+          doLogout();
+          return;
+        }
         const view = item.dataset.view;
         if (view) switchView(view);
       });
@@ -1172,6 +1546,7 @@
       const titles = {
         dashboard: { title: '仪表盘', crumb: '首页 / 仪表盘' },
         logs: { title: '通知日志', crumb: '首页 / 通知日志' },
+        users: { title: '用户管理', crumb: '首页 / 用户管理' },
         settings: { title: '系统设置', crumb: '首页 / 设置' }
       };
       document.querySelectorAll('.nav-item').forEach(n => {
@@ -1179,11 +1554,22 @@
       });
       document.getElementById('pageTitle').textContent = titles[view].title;
       document.getElementById('breadcrumb').textContent = titles[view].crumb;
-      ['dashboard', 'logs', 'settings'].forEach(v => {
+      ['dashboard', 'logs', 'users', 'settings'].forEach(v => {
         document.getElementById('view-' + v).style.display = v === view ? '' : 'none';
       });
-      if (view === 'dashboard') loadDashboard();
+      if (view === 'dashboard') {
+        const searchInput = document.getElementById('reminderSearchInput');
+        if (searchInput) searchInput.value = '';
+        const userFilter = document.getElementById('userFilter');
+        if (userFilter) userFilter.value = (window.currentUserRole === 'admin') ? 'all' : 'mine';
+        loadDashboard();
+      }
       if (view === 'logs') loadAllLogs();
+      if (view === 'users') {
+        const searchInput = document.getElementById('userSearchInput');
+        if (searchInput) searchInput.value = '';
+        loadUsers();
+      }
       if (view === 'settings') loadSettings();
       // 移动端切换视图后关闭侧边栏
       if (window.innerWidth <= 768) closeSidebar();
@@ -1202,7 +1588,9 @@
         const res = await fetch('/api/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
         const json = await res.json();
         if (json.success) {
-          showApp(json.data.username);
+          // 先加载时区设置再显示页面，确保时间显示正确
+          await loadTimezone();
+          showApp(json.data.username, json.data.role);
         } else {
           localStorage.removeItem('auth_token');
           showLogin();
@@ -1210,15 +1598,78 @@
       } catch(e) { showLogin(); }
     }
 
-    function showLogin() {
-      document.getElementById('loginPage').style.display = '';
-      document.getElementById('appBody').style.display = 'none';
+    async function loadTimezone() {
+      try {
+        const res = await fetch('/api/settings', { headers: getAuthHeaders() });
+        const json = await res.json();
+        if (json.success && json.data.timezone) {
+          systemTimezone = json.data.timezone;
+        }
+      } catch(e) { /* 使用默认值 */ }
     }
 
-    function showApp(username) {
+    async function saveTimezone(timezone) {
+      try {
+        const res = await fetch('/api/settings', {
+          method: 'PUT',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ timezone })
+        });
+        const json = await res.json();
+        if (json.success) {
+          systemTimezone = timezone;
+          alert('时区设置已更新');
+          loadDashboard();
+          return true;
+        } else {
+          alert('保存失败: ' + (json.error || '未知错误'));
+        }
+      } catch(e) { alert('请求失败: ' + e.message); }
+      return false;
+    }
+
+    function showLogin() {
+      document.getElementById('loginPage').style.display = 'flex';
+      document.getElementById('appBody').style.display = 'none';
+      document.getElementById('mainContent').style.display = 'none';
+      // 关闭移动端侧边栏
+      document.getElementById('appBody').classList.remove('open');
+      const overlay = document.getElementById('sidebarOverlay');
+      if (overlay) overlay.classList.remove('active');
+      // 确保登录卡片显示，注册卡片隐藏
+      const cards = document.querySelectorAll('#loginPage .login-card');
+      if (cards.length > 0) {
+        cards[0].style.display = '';
+      }
+      const regCard = document.getElementById('registerCard');
+      if (regCard) regCard.style.display = 'none';
+      const regErr = document.getElementById('registerError');
+      if (regErr) regErr.style.display = 'none';
+    }
+
+    function showApp(username, role) {
       document.getElementById('loginPage').style.display = 'none';
       document.getElementById('appBody').style.display = '';
+      document.getElementById('mainContent').style.display = '';
       document.getElementById('sidebarUsername').textContent = username || '';
+      window.currentUsername = username || '';
+      window.currentUserRole = role || 'user';
+      // 仅管理员显示用户管理菜单
+      document.getElementById('navUsers').style.display = (role === 'admin') ? '' : 'none';
+      // 管理员显示"所属用户"列表头
+      const ownerTh = document.getElementById('ownerTh');
+      if (ownerTh) ownerTh.style.display = (role === 'admin') ? '' : 'none';
+      // 管理员显示用户筛选器
+      const userFilter = document.getElementById('userFilter');
+      if (userFilter) {
+        if (role === 'admin') {
+          userFilter.style.display = '';
+          userFilter.value = 'all';
+        } else {
+          userFilter.style.display = 'none';
+          userFilter.value = 'mine';
+        }
+      }
       loadDashboard();
     }
 
@@ -1236,7 +1687,7 @@
       }).then(res => res.json()).then(json => {
         if (json.success) {
           localStorage.setItem('auth_token', json.data.token);
-          showApp(json.data.username);
+          showApp(json.data.username, json.data.role);
         } else {
           errEl.textContent = json.error || '登录失败';
           errEl.style.display = 'block';
@@ -1248,16 +1699,70 @@
       return false;
     }
 
+    function showRegister() {
+      document.querySelector('.login-card').style.display = 'none';
+      document.getElementById('registerCard').style.display = 'block';
+      refreshCaptcha();
+    }
+
+    let currentCaptchaId = '';
+    async function refreshCaptcha() {
+      try {
+        const res = await fetch('/api/auth/captcha');
+        const json = await res.json();
+        if (json.success) {
+          currentCaptchaId = json.data.id;
+          document.getElementById('captchaImage').innerHTML = json.data.svg;
+        }
+      } catch (err) {
+        console.error('验证码加载失败:', err);
+      }
+    }
+
+    function doRegister(e) {
+      e.preventDefault();
+      const email = document.getElementById('registerEmail').value;
+      const password = document.getElementById('registerPassword').value;
+      const captcha_code = document.getElementById('captchaCode').value;
+      const errEl = document.getElementById('registerError');
+      errEl.style.display = 'none';
+
+      fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, captcha_id: currentCaptchaId, captcha_code })
+      }).then(res => res.json()).then(json => {
+        if (json.success) {
+          alert('注册成功！请登录');
+          document.getElementById('registerEmail').value = '';
+          document.getElementById('registerPassword').value = '';
+          document.getElementById('captchaCode').value = '';
+          showLogin();
+          document.getElementById('loginUsername').value = email;
+          document.getElementById('loginPassword').focus();
+        } else {
+          errEl.textContent = json.error || '注册失败';
+          errEl.style.display = 'block';
+          refreshCaptcha();
+        }
+      }).catch(err => {
+        errEl.textContent = '网络错误: ' + err.message;
+        errEl.style.display = 'block';
+        refreshCaptcha();
+      });
+      return false;
+    }
+
     function doLogout() {
       const token = localStorage.getItem('auth_token');
+      localStorage.removeItem('auth_token');
       if (token) {
         fetch('/api/auth/logout', {
           method: 'POST',
           headers: { 'Authorization': 'Bearer ' + token }
-        });
+        }).catch(() => {});
       }
-      localStorage.removeItem('auth_token');
-      showLogin();
+      window.location.href = '/';
     }
 
     async function loadSettings() {
@@ -1269,6 +1774,20 @@
           document.getElementById('currentUsername').value = json.data.username;
         }
       } catch(e) { console.error(e); }
+      // 加载时区到下拉框
+      await loadTimezone();
+      const tzSelect = document.getElementById('timezoneSelect');
+      tzSelect.value = systemTimezone;
+      // 非管理员禁用修改
+      const isAdmin = window.currentUserRole === 'admin';
+      tzSelect.disabled = !isAdmin;
+      const saveBtn = tzSelect.parentElement.parentElement.querySelector('button');
+      if (saveBtn) saveBtn.style.display = isAdmin ? '' : 'none';
+    }
+
+    async function saveTimezoneBtn() {
+      const tz = document.getElementById('timezoneSelect').value;
+      await saveTimezone(tz);
     }
 
     function saveSettings(e) {
@@ -1292,6 +1811,186 @@
       return false;
     }
 
+    // ===== 用户管理 =====
+    let allUsers = [];
+
+    function renderUsers(users) {
+      const PAGE_SIZE = 10;
+      const { pagedData, totalPages, currentPage, totalItems } = getPagedData('users', users, PAGE_SIZE);
+
+      const tbody = document.getElementById('usersTableBody');
+      const cards = document.getElementById('usersCardsBody');
+
+      if (totalItems === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:40px; color:#94a3b8;">未找到匹配的用户</td></tr>';
+        cards.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p>未找到匹配的用户</p></div>';
+        renderPagination('usersPagination', 0, 1, 1, 'goUsersPage');
+        return;
+      }
+
+      tbody.innerHTML = pagedData.map(u => {
+        const isActive = u.status !== 'disabled';
+        const statusHtml = `<span style="padding:2px 8px; border-radius:4px; font-size:12px; ${isActive ? 'background:#dcfce7; color:#166534;' : 'background:#fee2e2; color:#991b1b;'}">${isActive ? '正常' : '停用'}</span>`;
+        const roleHtml = `<span style="padding:2px 8px; border-radius:4px; font-size:12px; ${u.role === 'admin' ? 'background:#dbeafe; color:#1e40af;' : 'background:#f1f5f9; color:#64748b;'}">${u.role === 'admin' ? '管理员' : '用户'}</span>`;
+        return `
+        <tr>
+          <td>${u.id}</td>
+          <td>${escapeHtml(u.username)}</td>
+          <td>${roleHtml}</td>
+          <td>${statusHtml}</td>
+          <td>${u.reminder_count}</td>
+          <td>${formatTime(u.created_at)}</td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn" style="padding:4px 12px; font-size:12px; background:${isActive ? '#f59e0b' : '#10b981'}; color:white;" onclick="toggleUserStatus(${u.id}, '${u.username.replace(/'/g, "\\'")}')">${isActive ? '停用' : '启用'}</button>
+              <button class="btn" style="padding:4px 12px; font-size:12px; background:#3b82f6; color:white;" onclick="editUser(${u.id}, '${u.username.replace(/'/g, "\\'")}', '${u.role}', '${u.status || 'active'}')">编辑</button>
+              ${u.role !== 'admin' ? `<button class="btn" style="padding:4px 12px; font-size:12px; background:#ef4444; color:white;" onclick="deleteUser(${u.id}, '${u.username.replace(/'/g, "\\'")}')">删除</button>` : ''}
+            </div>
+          </td>
+        </tr>
+      `;}).join('');
+
+      cards.innerHTML = pagedData.map(u => {
+        const isActive = u.status !== 'disabled';
+        const statusHtml = `<span style="padding:2px 8px; border-radius:4px; font-size:12px; ${isActive ? 'background:#dcfce7; color:#166534;' : 'background:#fee2e2; color:#991b1b;'}">${isActive ? '正常' : '停用'}</span>`;
+        const roleHtml = `<span style="padding:2px 8px; border-radius:4px; font-size:12px; ${u.role === 'admin' ? 'background:#dbeafe; color:#1e40af;' : 'background:#f1f5f9; color:#64748b;'}">${u.role === 'admin' ? '管理员' : '用户'}</span>`;
+        return `
+        <div class="reminder-card">
+          <div class="card-row"><span class="card-label">ID</span><span class="card-value">${u.id}</span></div>
+          <div class="card-row"><span class="card-label">用户名</span><span class="card-value">${escapeHtml(u.username)}</span></div>
+          <div class="card-row"><span class="card-label">角色</span><span class="card-value">${roleHtml}</span></div>
+          <div class="card-row"><span class="card-label">状态</span><span class="card-value">${statusHtml}</span></div>
+          <div class="card-row"><span class="card-label">提醒数量</span><span class="card-value">${u.reminder_count}</span></div>
+          <div class="card-row"><span class="card-label">注册时间</span><span class="card-value">${formatTime(u.created_at)}</span></div>
+          <div class="card-actions" style="margin-top:10px; flex-wrap:wrap;">
+            <button class="btn" style="padding:4px 12px; font-size:12px; background:${isActive ? '#f59e0b' : '#10b981'}; color:white;" onclick="toggleUserStatus(${u.id}, '${u.username.replace(/'/g, "\\'")}')">${isActive ? '停用' : '启用'}</button>
+            <button class="btn" style="padding:4px 12px; font-size:12px; background:#3b82f6; color:white;" onclick="editUser(${u.id}, '${u.username.replace(/'/g, "\\'")}', '${u.role}', '${u.status || 'active'}')">编辑</button>
+            ${u.role !== 'admin' ? `<button class="btn" style="padding:4px 12px; font-size:12px; background:#ef4444; color:white;" onclick="deleteUser(${u.id}, '${u.username.replace(/'/g, "\\'")}')">删除</button>` : ''}
+          </div>
+        </div>
+      `;}).join('');
+
+      renderPagination('usersPagination', totalItems, currentPage, totalPages, 'goUsersPage');
+    }
+
+    function goUsersPage(page) {
+      setPage('users', page);
+      const kw = (document.getElementById('userSearchInput')?.value || '').trim().toLowerCase();
+      const data = kw ? allUsers.filter(u => (u.username && u.username.toLowerCase().includes(kw))) : allUsers;
+      renderUsers(data);
+    }
+
+    function filterUsers(keyword) {
+      const kw = keyword.trim().toLowerCase();
+      setPage('users', 1);
+      if (!kw) {
+        renderUsers(allUsers);
+        return;
+      }
+      const filtered = allUsers.filter(u =>
+        (u.username && u.username.toLowerCase().includes(kw))
+      );
+      renderUsers(filtered);
+    }
+
+    async function loadUsers() {
+      try {
+        const res = await fetch('/api/users', { headers: getAuthHeaders() });
+        const json = await res.json();
+        if (!json.success) {
+          if (res.status === 403) { alert('需要管理员权限'); return; }
+          console.error(json.error);
+          return;
+        }
+        allUsers = json.data || [];
+        // 如果搜索框有内容，按搜索条件过滤；否则显示全部
+        const searchInput = document.getElementById('userSearchInput');
+        if (searchInput && searchInput.value.trim()) {
+          filterUsers(searchInput.value);
+        } else {
+          renderUsers(allUsers);
+        }
+      } catch(e) { console.error(e); }
+    }
+
+    function editUser(id, username, role, status) {
+      document.getElementById('editUserId').value = id;
+      document.getElementById('editUserUsername').value = username;
+      document.getElementById('editUserPassword').value = '';
+      document.getElementById('editUserRole').value = role;
+      document.getElementById('editUserStatus').value = status || 'active';
+      document.getElementById('userModal').style.display = 'flex';
+    }
+
+    function closeUserModal() {
+      document.getElementById('userModal').style.display = 'none';
+    }
+
+    function toggleUserStatus(id, username) {
+      const action = confirm(`确定要切换用户「${username}」的启用/停用状态吗？`);
+      if (!action) return;
+      fetch(`/api/users/${id}/toggle-status`, {
+        method: 'POST',
+        headers: getAuthHeaders()
+      }).then(res => res.json()).then(json => {
+        if (json.success) {
+          loadUsers();
+        } else {
+          alert('操作失败: ' + (json.error || '未知错误'));
+        }
+      }).catch(err => alert('请求失败: ' + err.message));
+    }
+
+    function saveUser(e) {
+      e.preventDefault();
+      const id = document.getElementById('editUserId').value;
+      const username = document.getElementById('editUserUsername').value;
+      const password = document.getElementById('editUserPassword').value;
+      const role = document.getElementById('editUserRole').value;
+      const status = document.getElementById('editUserStatus').value;
+
+      fetch(`/api/users/${id}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ username, password: password || undefined, role, status })
+      }).then(res => res.json()).then(json => {
+        if (json.success) {
+          closeUserModal();
+          loadUsers();
+        } else {
+          alert('保存失败: ' + (json.error || '未知错误'));
+        }
+      }).catch(err => alert('请求失败: ' + err.message));
+      return false;
+    }
+
+    let deleteUserTarget = null;
+    function deleteUser(id, username) {
+      deleteUserTarget = id;
+      document.getElementById('deleteUserName').textContent = username;
+      document.getElementById('deleteUserModal').style.display = 'flex';
+    }
+
+    function closeDeleteUserModal() {
+      document.getElementById('deleteUserModal').style.display = 'none';
+      deleteUserTarget = null;
+    }
+
+    function confirmDeleteUser() {
+      if (!deleteUserTarget) return;
+      fetch(`/api/users/${deleteUserTarget}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders()
+      }).then(res => res.json()).then(json => {
+        if (json.success) {
+          closeDeleteUserModal();
+          loadUsers();
+        } else {
+          alert('删除失败: ' + (json.error || '未知错误'));
+        }
+      }).catch(err => alert('请求失败: ' + err.message));
+    }
+
     async function loadDashboard() {
       try {
         const res = await fetch('/api/reminders', { headers: getAuthHeaders() });
@@ -1309,132 +2008,222 @@
       loadReminders();
     }
 
+    let allReminders = [];
+
+    function renderReminders(reminders) {
+      const PAGE_SIZE = 10;
+      const { pagedData, totalPages, currentPage, totalItems } = getPagedData('reminders', reminders, PAGE_SIZE);
+
+      const tbody = document.getElementById('remindersTableBody');
+      const cardsEl = document.getElementById('reminderCards');
+      const isAdmin = window.currentUserRole === 'admin';
+      const ownerColspan = isAdmin ? 9 : 8;
+
+      const emptyHtml = '<div class="empty-state"><div class="icon">📭</div><p>暂无事项提醒，点击右上角"新建提醒"开始吧！</p></div>';
+
+      if (totalItems === 0) {
+        tbody.innerHTML = `<tr><td colspan="${ownerColspan}">${emptyHtml}</td></tr>`;
+        cardsEl.innerHTML = emptyHtml;
+        renderPagination('remindersPagination', 0, 1, 1, 'goRemindersPage');
+        return;
+      }
+
+      tbody.innerHTML = pagedData.map(r => {
+        const nextDate = getNextReminderDate(r.start_date, r.interval_days, r.enabled, r.interval_unit);
+        return `
+        <tr>
+          <td>
+            <div class="reminder-title">${escapeHtml(r.title)}</div>
+            ${r.description ? `<div class="reminder-desc">${escapeHtml(r.description)}</div>` : ''}
+            <div class="reminder-meta">ID: #${r.id}</div>
+          </td>
+          ${isAdmin ? `<td>${r.username ? escapeHtml(r.username) : '<span style="color:#94a3b8;">未知</span>'}</td>` : ''}
+          <td>${formatStartDateTime(r.start_date)}</td>
+          <td>每 ${r.interval_days} ${getUnitLabel(r.interval_unit)}</td>
+          <td>${nextDate}</td>
+          <td>
+            <span class="status-badge ${r.enabled ? 'active' : 'inactive'}">
+              <span class="status-dot"></span>
+              ${r.enabled ? '启用' : '暂停'}
+            </span>
+          </td>
+          <td>
+            <div class="tags">
+              ${(r.telegram_bot_token || r.telegram_chat_id) ? '<span class="tag tag-blue">Telegram</span>' : ''}
+              ${(r.email_host || r.email_to) ? '<span class="tag tag-indigo">Email</span>' : ''}
+              ${(r.feishu_app_id || r.feishu_receive_id) ? '<span class="tag tag-green">飞书</span>' : ''}
+              ${r.bark_url ? '<span class="tag tag-amber">Bark</span>' : ''}
+              ${(!r.telegram_bot_token && !r.telegram_chat_id && !r.email_host && !r.email_to && !r.feishu_app_id && !r.feishu_receive_id && !r.bark_url) ? '<span class="tag tag-slate">未配置</span>' : ''}
+            </div>
+          </td>
+          <td>${formatTime(r.created_at)}</td>
+          <td>
+            <div class="actions-cell">
+              <button class="btn btn-sm btn-warning" onclick="toggleReminder(${r.id}, ${!r.enabled})">${r.enabled ? '暂停' : '启用'}</button>
+              <button class="btn btn-sm btn-success" onclick="fireReminder(${r.id})">发送</button>
+              <button class="btn btn-sm btn-primary" onclick="editReminder(${r.id})">编辑</button>
+              <button class="btn btn-sm btn-clone" onclick="cloneReminder(${r.id})">克隆</button>
+              <button class="btn btn-sm btn-secondary" onclick="viewLogs(${r.id})">日志</button>
+              <button class="btn btn-sm btn-danger" onclick="deleteReminder(${r.id})">删除</button>
+            </div>
+          </td>
+        </tr>
+      `;}).join('');
+
+      cardsEl.innerHTML = pagedData.map(r => {
+        const tags = [];
+        if (r.telegram_bot_token || r.telegram_chat_id) tags.push('<span class="tag tag-blue">Telegram</span>');
+        if (r.email_host || r.email_to) tags.push('<span class="tag tag-indigo">Email</span>');
+        if (r.feishu_app_id || r.feishu_receive_id) tags.push('<span class="tag tag-green">飞书</span>');
+        if (r.bark_url) tags.push('<span class="tag tag-amber">Bark</span>');
+        if (!r.telegram_bot_token && !r.telegram_chat_id && !r.email_host && !r.email_to && !r.feishu_app_id && !r.feishu_receive_id && !r.bark_url) tags.push('<span class="tag tag-slate">未配置</span>');
+        const nextDate = getNextReminderDate(r.start_date, r.interval_days, r.enabled, r.interval_unit);
+        return `
+          <div class="reminder-card">
+            <div class="rc-header">
+              <div style="flex:1; min-width:0;">
+                <div class="rc-title">${escapeHtml(r.title)}</div>
+                ${r.description ? `<div class="rc-desc">${escapeHtml(r.description)}</div>` : ''}
+                <div class="rc-id">ID: #${r.id}</div>
+              </div>
+              <span class="status-badge ${r.enabled ? 'active' : 'inactive'}">
+                <span class="status-dot"></span>
+                ${r.enabled ? '启用' : '暂停'}
+              </span>
+            </div>
+            <div class="rc-meta">
+              ${isAdmin ? `<div class="rc-meta-item"><span class="rc-meta-label">所属用户</span><span class="rc-meta-value">${r.username ? escapeHtml(r.username) : '未知'}</span></div>` : ''}
+              <div class="rc-meta-item">
+                <span class="rc-meta-label">开始时间</span>
+                <span class="rc-meta-value">${formatStartDateTime(r.start_date)}</span>
+              </div>
+              <div class="rc-meta-item">
+                <span class="rc-meta-label">间隔</span>
+                <span class="rc-meta-value">每 ${r.interval_days} ${getUnitLabel(r.interval_unit)}</span>
+              </div>
+              <div class="rc-meta-item">
+                <span class="rc-meta-label">下次提醒</span>
+                <span class="rc-meta-value">${nextDate}</span>
+              </div>
+              <div class="rc-meta-item">
+                <span class="rc-meta-label">创建时间</span>
+                <span class="rc-meta-value">${formatTime(r.created_at)}</span>
+              </div>
+              <div class="rc-meta-item">
+                <span class="rc-meta-label">通知渠道</span>
+                <span class="rc-meta-value"><div class="tags">${tags.join('')}</div></span>
+              </div>
+            </div>
+            <div class="rc-actions">
+              <button class="btn btn-sm btn-warning" onclick="toggleReminder(${r.id}, ${!r.enabled})">${r.enabled ? '暂停' : '启用'}</button>
+              <button class="btn btn-sm btn-success" onclick="fireReminder(${r.id})">发送</button>
+              <button class="btn btn-sm btn-primary" onclick="editReminder(${r.id})">编辑</button>
+              <button class="btn btn-sm btn-clone" onclick="cloneReminder(${r.id})">克隆</button>
+              <button class="btn btn-sm btn-secondary" onclick="viewLogs(${r.id})">日志</button>
+              <button class="btn btn-sm btn-danger" onclick="deleteReminder(${r.id})">删除</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      renderPagination('remindersPagination', totalItems, currentPage, totalPages, 'goRemindersPage');
+    }
+
+    function filterReminders(keyword) {
+      const kw = keyword.trim().toLowerCase();
+      setPage('reminders', 1);
+      if (!kw) {
+        renderReminders(allReminders);
+        return;
+      }
+      const filtered = allReminders.filter(r =>
+        (r.title && r.title.toLowerCase().includes(kw)) ||
+        (r.description && r.description.toLowerCase().includes(kw))
+      );
+      renderReminders(filtered);
+    }
+
+    function getFilteredReminders() {
+      let data = allReminders;
+      // 用户筛选
+      const userFilter = document.getElementById('userFilter');
+      if (userFilter && userFilter.value === 'mine' && window.currentUsername) {
+        data = data.filter(r => r.username === window.currentUsername);
+      }
+      // 关键词搜索
+      const kw = (document.getElementById('reminderSearchInput')?.value || '').trim().toLowerCase();
+      if (!kw) return data;
+      return data.filter(r =>
+        (r.title && r.title.toLowerCase().includes(kw)) ||
+        (r.description && r.description.toLowerCase().includes(kw))
+      );
+    }
+
+    function filterByUser(value) {
+      setPage('reminders', 1);
+      renderReminders(getFilteredReminders());
+    }
+
+    function goRemindersPage(page) {
+      setPage('reminders', page);
+      renderReminders(getFilteredReminders());
+    }
+
     async function loadReminders() {
       try {
         const res = await fetch('/api/reminders', { headers: getAuthHeaders() });
         const json = await res.json();
         if (!json.success && res.status === 401) { doLogout(); return; }
-        const reminders = json.data || [];
-        const tbody = document.querySelector('#remindersTable tbody');
-        const cardsEl = document.getElementById('reminderCards');
-
-        const emptyHtml = '<div class="empty-state"><div class="icon">📭</div><p>暂无事项提醒，点击右上角"新建提醒"开始吧！</p></div>';
-
-        if (reminders.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="8">' + emptyHtml + '</td></tr>';
-          cardsEl.innerHTML = emptyHtml;
-          return;
+        allReminders = json.data || [];
+        setPage('reminders', 1);
+        const searchInput = document.getElementById('reminderSearchInput');
+        if (searchInput && searchInput.value.trim()) {
+          filterReminders(searchInput.value);
+        } else {
+          renderReminders(allReminders);
         }
-
-        tbody.innerHTML = reminders.map(r => {
-          const nextDate = getNextReminderDate(r.start_date, r.interval_days, r.enabled);
-          return `
-          <tr>
-            <td>
-              <div class="reminder-title">${escapeHtml(r.title)}</div>
-              <div class="reminder-meta">ID: #${r.id}</div>
-            </td>
-            <td>${r.start_date}</td>
-            <td>每 ${r.interval_days} 天</td>
-            <td>${nextDate}</td>
-            <td>
-              <span class="status-badge ${r.enabled ? 'active' : 'inactive'}">
-                <span class="status-dot"></span>
-                ${r.enabled ? '启用' : '暂停'}
-              </span>
-            </td>
-            <td>
-              <div class="tags">
-                ${(r.telegram_bot_token || r.telegram_chat_id) ? '<span class="tag tag-blue">Telegram</span>' : ''}
-                ${(r.email_host || r.email_to) ? '<span class="tag tag-indigo">Email</span>' : ''}
-                ${(r.feishu_app_id || r.feishu_receive_id) ? '<span class="tag tag-green">飞书</span>' : ''}
-                ${(!r.telegram_bot_token && !r.telegram_chat_id && !r.email_host && !r.email_to && !r.feishu_app_id && !r.feishu_receive_id) ? '<span class="tag tag-slate">未配置</span>' : ''}
-              </div>
-            </td>
-            <td>${r.created_at || '--'}</td>
-            <td>
-              <div class="actions-cell">
-                <button class="btn btn-sm btn-warning" onclick="toggleReminder(${r.id}, ${!r.enabled})">${r.enabled ? '暂停' : '启用'}</button>
-                <button class="btn btn-sm btn-success" onclick="fireReminder(${r.id})">发送</button>
-                <button class="btn btn-sm btn-primary" onclick="editReminder(${r.id})">编辑</button>
-                <button class="btn btn-sm btn-secondary" onclick="viewLogs(${r.id})">日志</button>
-                <button class="btn btn-sm btn-danger" onclick="deleteReminder(${r.id})">删除</button>
-              </div>
-            </td>
-          </tr>
-        `;}).join('');
-
-        cardsEl.innerHTML = reminders.map(r => {
-          const tags = [];
-          if (r.telegram_bot_token || r.telegram_chat_id) tags.push('<span class="tag tag-blue">Telegram</span>');
-          if (r.email_host || r.email_to) tags.push('<span class="tag tag-indigo">Email</span>');
-          if (r.feishu_app_id || r.feishu_receive_id) tags.push('<span class="tag tag-green">飞书</span>');
-          if (!r.telegram_bot_token && !r.telegram_chat_id && !r.email_host && !r.email_to && !r.feishu_app_id && !r.feishu_receive_id) tags.push('<span class="tag tag-slate">未配置</span>');
-          const nextDate = getNextReminderDate(r.start_date, r.interval_days, r.enabled);
-          return `
-            <div class="reminder-card">
-              <div class="rc-header">
-                <div style="flex:1; min-width:0;">
-                  <div class="rc-title">${escapeHtml(r.title)}</div>
-                  <div class="rc-id">ID: #${r.id}</div>
-                </div>
-                <span class="status-badge ${r.enabled ? 'active' : 'inactive'}">
-                  <span class="status-dot"></span>
-                  ${r.enabled ? '启用' : '暂停'}
-                </span>
-              </div>
-              <div class="rc-meta">
-                <div class="rc-meta-item">
-                  <span class="rc-meta-label">开始日期</span>
-                  <span class="rc-meta-value">${r.start_date}</span>
-                </div>
-                <div class="rc-meta-item">
-                  <span class="rc-meta-label">间隔</span>
-                  <span class="rc-meta-value">每 ${r.interval_days} 天</span>
-                </div>
-                <div class="rc-meta-item">
-                  <span class="rc-meta-label">下次提醒</span>
-                  <span class="rc-meta-value">${nextDate}</span>
-                </div>
-                <div class="rc-meta-item">
-                  <span class="rc-meta-label">创建时间</span>
-                  <span class="rc-meta-value">${r.created_at || '--'}</span>
-                </div>
-                <div class="rc-meta-item">
-                  <span class="rc-meta-label">通知渠道</span>
-                  <span class="rc-meta-value"><div class="tags">${tags.join('')}</div></span>
-                </div>
-              </div>
-              <div class="rc-actions">
-                <button class="btn btn-sm btn-warning" onclick="toggleReminder(${r.id}, ${!r.enabled})">${r.enabled ? '暂停' : '启用'}</button>
-                <button class="btn btn-sm btn-success" onclick="fireReminder(${r.id})">发送</button>
-                <button class="btn btn-sm btn-primary" onclick="editReminder(${r.id})">编辑</button>
-                <button class="btn btn-sm btn-secondary" onclick="viewLogs(${r.id})">日志</button>
-                <button class="btn btn-sm btn-danger" onclick="deleteReminder(${r.id})">删除</button>
-              </div>
-            </div>
-          `;
-        }).join('');
       } catch(e) { console.error(e); }
+    }
+
+    let allLogs = [];
+
+    function renderLogs(logs) {
+      const PAGE_SIZE = 10;
+      const { pagedData, totalPages, currentPage, totalItems } = getPagedData('logs', logs, PAGE_SIZE);
+
+      const list = document.getElementById('allLogsList');
+      if (totalItems === 0) {
+        list.innerHTML = '<div class="empty-state"><div class="icon">📜</div><p>暂无通知记录</p></div>';
+        renderPagination('logsPagination', 0, 1, 1, 'goLogsPage');
+        return;
+      }
+
+      list.innerHTML = '<div style="padding: 16px 20px;">' + pagedData.map(log => `
+        <div class="log-item ${log.status}">
+          <span class="time">${formatTime(log.sent_at)}</span>
+          ${log.title ? `<div style="font-weight:600; color:#1e293b; margin-top:2px;">📌 ${escapeHtml(log.title)}</div>` : ''}
+          ${log.description ? `<div style="color:#64748b; font-size:12px; margin-top:2px;">📝 ${escapeHtml(log.description)}</div>` : ''}
+          <div style="margin-top:4px;"><strong style="text-transform:uppercase; font-size: 11px;">${log.channel}</strong> - ${log.status === 'success' ? '✓ 成功' : '✗ 失败'}</div>
+          ${log.error_message ? `<div style="color:#dc2626; font-size:12px; margin-top:4px;">${escapeHtml(log.error_message)}</div>` : ''}
+        </div>
+      `).join('') + '</div>';
+
+      renderPagination('logsPagination', totalItems, currentPage, totalPages, 'goLogsPage');
+    }
+
+    function goLogsPage(page) {
+      setPage('logs', page);
+      renderLogs(allLogs);
     }
 
     async function loadAllLogs() {
       try {
-        const res = await fetch('/api/logs?limit=50', { headers: getAuthHeaders() });
+        const res = await fetch('/api/logs?limit=500', { headers: getAuthHeaders() });
         const json = await res.json();
         if (!json.success && res.status === 401) { doLogout(); return; }
-        const list = document.getElementById('allLogsList');
-        if (!json.data || json.data.length === 0) {
-          list.innerHTML = '<div class="empty-state"><div class="icon">📜</div><p>暂无通知记录</p></div>';
-        } else {
-          list.innerHTML = '<div style="padding: 16px 20px;">' + json.data.map(log => `
-            <div class="log-item ${log.status}">
-              <span class="time">${log.sent_at}</span>
-              <div><strong style="text-transform:uppercase; font-size: 11px;">${log.channel}</strong> - ${log.status === 'success' ? '✓ 成功' : '✗ 失败'}</div>
-              ${log.error_message ? `<div style="color:#dc2626; font-size:12px; margin-top:4px;">${escapeHtml(log.error_message)}</div>` : ''}
-            </div>
-          `).join('') + '</div>';
-        }
+        allLogs = json.data || [];
+        setPage('logs', 1);
+        renderLogs(allLogs);
       } catch(e) { console.error(e); }
     }
 
@@ -1444,30 +2233,176 @@
       return div.innerHTML;
     }
 
-    // 计算下次提醒日期 = 上一次提醒日期 + 间隔天数
-    function getNextReminderDate(startDateStr, intervalDays, enabled) {
+    // 通用分页状态
+    const paginationState = {};
+
+    function getPagedData(key, data, pageSize) {
+      if (!paginationState[key]) paginationState[key] = { page: 1 };
+      const state = paginationState[key];
+      const totalPages = Math.max(1, Math.ceil(data.length / pageSize));
+      if (state.page > totalPages) state.page = totalPages;
+      const start = (state.page - 1) * pageSize;
+      return {
+        pagedData: data.slice(start, start + pageSize),
+        totalPages,
+        currentPage: state.page,
+        totalItems: data.length
+      };
+    }
+
+    function setPage(key, page) {
+      if (!paginationState[key]) paginationState[key] = { page: 1 };
+      paginationState[key].page = page;
+    }
+
+    function renderPagination(containerId, totalItems, currentPage, totalPages, onChange) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      if (totalItems <= 10) {
+        container.innerHTML = '';
+        container.style.display = 'none';
+        return;
+      }
+      container.style.display = 'flex';
+      let buttons = '';
+      const addBtn = (page, label, disabled = false, active = false) => {
+        buttons += `<button ${active ? 'class="active"' : ''} ${disabled ? 'disabled' : ''} onclick="(${onChange})(${page})">${label}</button>`;
+      };
+      addBtn(currentPage - 1, '‹', currentPage <= 1);
+      const maxVisible = 5;
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+      if (endPage - startPage < maxVisible - 1) startPage = Math.max(1, endPage - maxVisible + 1);
+      if (startPage > 1) {
+        addBtn(1, '1');
+        if (startPage > 2) buttons += '<span class="pagination-ellipsis">...</span>';
+      }
+      for (let i = startPage; i <= endPage; i++) addBtn(i, String(i), false, i === currentPage);
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) buttons += '<span class="pagination-ellipsis">...</span>';
+        addBtn(totalPages, String(totalPages));
+      }
+      addBtn(currentPage + 1, '›', currentPage >= totalPages);
+      container.innerHTML = `
+        <div class="pagination-info">共 ${totalItems} 条，第 ${currentPage} / ${totalPages} 页</div>
+        <div class="pagination-controls">${buttons}</div>
+      `;
+    }
+
+    // 获取间隔单位的中文标签
+    function getUnitLabel(unit) {
+      switch (unit) {
+        case 'minutes': return '分钟';
+        case 'hours': return '小时';
+        case 'months': return '个月';
+        case 'days':
+        default: return '天';
+      }
+    }
+
+    // 格式化开始时间显示（北京时间 → 配置时区）
+    function formatStartDateTime(dateStr) {
+      if (!dateStr) return '--';
+      // 去掉秒级精度，只显示到分钟
+      const result = formatTime(dateStr);
+      return result;
+    }
+
+    // 根据单位添加间隔到日期（使用UTC方法避免时区干扰）
+    function addIntervalToDate(date, value, unit) {
+      const result = new Date(date);
+      switch (unit) {
+        case 'minutes': result.setUTCMinutes(result.getUTCMinutes() + value); break;
+        case 'hours': result.setUTCHours(result.getUTCHours() + value); break;
+        case 'months': result.setUTCMonth(result.getUTCMonth() + value); break;
+        case 'days':
+        default: result.setUTCDate(result.getUTCDate() + value); break;
+      }
+      return result;
+    }
+
+    // 格式化下次提醒日期
+    function formatNextDateStr(date, unit) {
+      const parts = new Intl.DateTimeFormat('zh-CN', {
+        timeZone: systemTimezone, hour12: false,
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit'
+      }).formatToParts(date);
+      const get = type => parts.find(p => p.type === type)?.value || '';
+      const dateStr = `${get('year')}-${get('month')}-${get('day')}`;
+      if (unit === 'minutes' || unit === 'hours') {
+        return dateStr + ' ' + get('hour') + ':' + get('minute');
+      }
+      return dateStr;
+    }
+
+    // 计算下次提醒日期
+    function getNextReminderDate(startDateStr, intervalDays, enabled, unit) {
       if (!enabled) return '已暂停';
-      const start = new Date(startDateStr + 'T00:00:00');
+      // 将存储的北京时间字符串解析为UTC时间戳
+      const match = startDateStr.match(/(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})/);
+      if (!match) return '--';
+      const utcMs = Date.UTC(
+        parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]),
+        parseInt(match[4]), parseInt(match[5])
+      ) - 8 * 3600 * 1000;
+      const start = new Date(utcMs);
       if (isNaN(start.getTime())) return '--';
+      const u = unit || 'days';
       const now = new Date();
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      const oneDay = 24 * 60 * 60 * 1000;
       // 开始日期在未来：下次就是开始日期
-      if (start > today) return startDateStr;
-      // 上一次提醒日期 = start + floor(已过天数/间隔) * 间隔
-      const diffDays = Math.floor((today.getTime() - start.getTime()) / oneDay);
-      const lastIndex = Math.floor(diffDays / intervalDays);
-      const lastDate = new Date(start.getTime() + lastIndex * intervalDays * oneDay);
-      // 下次 = 上次 + 间隔
-      const next = new Date(lastDate.getTime() + intervalDays * oneDay);
-      return next.getFullYear() + '-' + String(next.getMonth() + 1).padStart(2, '0') + '-' + String(next.getDate()).padStart(2, '0');
+      if (start > now) return formatNextDateStr(start, u);
+      // 计算已过的间隔数
+      let diffMs, unitMs;
+      switch (u) {
+        case 'minutes': unitMs = 60 * 1000; break;
+        case 'hours': unitMs = 60 * 60 * 1000; break;
+        case 'days': unitMs = 24 * 60 * 60 * 1000; break;
+        case 'months': {
+          // 月间隔按月计算（使用UTC方法）
+          const monthDiff = (now.getUTCFullYear() - start.getUTCFullYear()) * 12 + (now.getUTCMonth() - start.getUTCMonth());
+          let lastIndex = Math.floor(monthDiff / intervalDays);
+          let lastDate = addIntervalToDate(start, lastIndex * intervalDays, u);
+          if (lastDate > now) {
+            lastIndex = Math.max(0, lastIndex - 1);
+            lastDate = addIntervalToDate(start, lastIndex * intervalDays, u);
+          }
+          const next = addIntervalToDate(lastDate, intervalDays, u);
+          return formatNextDateStr(next, u);
+        }
+        default: unitMs = 24 * 60 * 60 * 1000;
+      }
+      diffMs = now.getTime() - start.getTime();
+      let lastIndex = Math.floor(diffMs / (intervalDays * unitMs));
+      let lastDate = addIntervalToDate(start, lastIndex * intervalDays, u);
+      if (lastDate > now) {
+        lastIndex = Math.max(0, lastIndex - 1);
+        lastDate = addIntervalToDate(start, lastIndex * intervalDays, u);
+      }
+      const next = addIntervalToDate(lastDate, intervalDays, u);
+      return formatNextDateStr(next, u);
+    }
+
+    // 间隔单位变化时调整输入限制
+    function onIntervalUnitChange() {
+      const unit = document.getElementById('interval_unit').value;
+      const input = document.getElementById('interval_days');
+      switch (unit) {
+        case 'minutes': input.max = 59; input.placeholder = '例如：30'; break;
+        case 'hours': input.max = 720; input.placeholder = '例如：12'; break;
+        case 'months': input.max = 120; input.placeholder = '例如：3'; break;
+        case 'days':
+        default: input.max = 3650; input.placeholder = '例如：7'; break;
+      }
     }
 
     function getFormData() {
       return {
         title: document.getElementById('title').value,
-        start_date: document.getElementById('start_date').value,
+        description: document.getElementById('description').value || undefined,
+        start_date: tzToBeijing(document.getElementById('start_date').value),
         interval_days: parseInt(document.getElementById('interval_days').value, 10),
+        interval_unit: document.getElementById('interval_unit').value,
         telegram_bot_token: document.getElementById('telegram_bot_token').value || undefined,
         telegram_chat_id: document.getElementById('telegram_chat_id').value || undefined,
         email_host: document.getElementById('email_host').value || undefined,
@@ -1477,14 +2412,18 @@
         email_to: document.getElementById('email_to').value || undefined,
         feishu_app_id: document.getElementById('feishu_app_id').value || undefined,
         feishu_app_secret: document.getElementById('feishu_app_secret').value || undefined,
-        feishu_receive_id: document.getElementById('feishu_receive_id').value || undefined
+        feishu_receive_id: document.getElementById('feishu_receive_id').value || undefined,
+        bark_url: document.getElementById('bark_url').value || undefined
       };
     }
 
     function fillForm(r) {
       document.getElementById('title').value = r.title || '';
-      document.getElementById('start_date').value = r.start_date || '';
+      document.getElementById('description').value = r.description || '';
+      document.getElementById('start_date').value = beijingToTz(r.start_date) || '';
       document.getElementById('interval_days').value = r.interval_days || 7;
+      document.getElementById('interval_unit').value = r.interval_unit || 'days';
+      onIntervalUnitChange();
       document.getElementById('telegram_bot_token').value = r.telegram_bot_token || '';
       document.getElementById('telegram_chat_id').value = r.telegram_chat_id || '';
       document.getElementById('email_host').value = r.email_host || '';
@@ -1495,7 +2434,10 @@
       document.getElementById('feishu_app_id').value = r.feishu_app_id || '';
       document.getElementById('feishu_app_secret').value = r.feishu_app_secret || '';
       document.getElementById('feishu_receive_id').value = r.feishu_receive_id || '';
-      if (r.feishu_app_id || r.feishu_receive_id) {
+      document.getElementById('bark_url').value = r.bark_url || '';
+      if (r.bark_url) {
+        document.querySelector('.tab[data-tab="bark"]').click();
+      } else if (r.feishu_app_id || r.feishu_receive_id) {
         document.querySelector('.tab[data-tab="feishu"]').click();
       } else if (r.email_host || r.email_to) {
         document.querySelector('.tab[data-tab="email"]').click();
@@ -1508,7 +2450,10 @@
       editingId = null;
       document.getElementById('edit_id').value = '';
       document.getElementById('reminderForm').reset();
-      document.getElementById('start_date').valueAsDate = new Date();
+      // 设置默认开始时间为当前时间（配置时区）
+      document.getElementById('start_date').value = nowInTz();
+      document.getElementById('interval_unit').value = 'days';
+      onIntervalUnitChange();
       document.querySelector('.tab[data-tab="telegram"]').click();
     }
 
@@ -1562,6 +2507,25 @@
       } catch(e) { console.error(e); }
     }
 
+    async function cloneReminder(id) {
+      try {
+        const res = await fetch('/api/reminders', { headers: getAuthHeaders() });
+        const json = await res.json();
+        if (!json.success && res.status === 401) { doLogout(); return; }
+        const item = json.data.find(r => r.id === id);
+        if (!item) { alert('未找到该提醒'); return; }
+
+        editingId = null;
+        document.getElementById('edit_id').value = '';
+        fillForm(item);
+        // 标题添加"（副本）"标记
+        document.getElementById('title').value = item.title + '（副本）';
+        document.getElementById('modalTitle').textContent = '克隆事项提醒';
+        document.getElementById('submitBtn').textContent = '创建提醒';
+        document.getElementById('formModal').classList.add('active');
+      } catch(e) { console.error(e); }
+    }
+
     async function toggleReminder(id, enabled) {
       try {
         await fetch(`/api/reminders/${id}/toggle`, {
@@ -1598,28 +2562,51 @@
           if (json.data.telegram) results.push('Telegram: ' + (json.data.telegram.success ? '✓ 成功' : '✗ 失败 - ' + json.data.telegram.error));
           if (json.data.email) results.push('Email: ' + (json.data.email.success ? '✓ 成功' : '✗ 失败 - ' + json.data.email.error));
           if (json.data.feishu) results.push('飞书: ' + (json.data.feishu.success ? '✓ 成功' : '✗ 失败 - ' + json.data.feishu.error));
+          if (json.data.bark) results.push('Bark: ' + (json.data.bark.success ? '✓ 成功' : '✗ 失败 - ' + json.data.bark.error));
           alert(results.join('\n') || '没有可用的通知渠道');
         }
       } catch(e) { console.error(e); }
     }
 
+    let allReminderLogs = [];
+
+    function renderReminderLogs(logs) {
+      const PAGE_SIZE = 10;
+      const { pagedData, totalPages, currentPage, totalItems } = getPagedData('reminderLogs', logs, PAGE_SIZE);
+
+      const list = document.getElementById('logsList');
+      if (totalItems === 0) {
+        list.innerHTML = '<p style="color:#9ca3af; text-align:center; padding:20px;">暂无通知记录</p>';
+        renderPagination('logsModalPagination', 0, 1, 1, 'goReminderLogsPage');
+        return;
+      }
+
+      list.innerHTML = pagedData.map(log => `
+        <div class="log-item ${log.status}">
+          <span class="time">${formatTime(log.sent_at)}</span>
+          ${log.title ? `<div style="font-weight:600; color:#1e293b; margin-top:2px;">📌 ${escapeHtml(log.title)}</div>` : ''}
+          ${log.description ? `<div style="color:#64748b; font-size:12px; margin-top:2px;">📝 ${escapeHtml(log.description)}</div>` : ''}
+          <div style="margin-top:4px;"><strong style="text-transform:uppercase; font-size: 11px;">${log.channel}</strong> - ${log.status === 'success' ? '✓ 成功' : '✗ 失败'}</div>
+          ${log.error_message ? `<div style="color:#dc2626; font-size:12px; margin-top:4px;">${escapeHtml(log.error_message)}</div>` : ''}
+        </div>
+      `).join('');
+
+      renderPagination('logsModalPagination', totalItems, currentPage, totalPages, 'goReminderLogsPage');
+    }
+
+    function goReminderLogsPage(page) {
+      setPage('reminderLogs', page);
+      renderReminderLogs(allReminderLogs);
+    }
+
     async function viewLogs(id) {
       try {
-        const res = await fetch(`/api/reminders/${id}/logs?limit=20`, { headers: getAuthHeaders() });
+        const res = await fetch(`/api/reminders/${id}/logs?limit=500`, { headers: getAuthHeaders() });
         const json = await res.json();
         if (!json.success && res.status === 401) { doLogout(); return; }
-        const list = document.getElementById('logsList');
-        if (!json.data || json.data.length === 0) {
-          list.innerHTML = '<p style="color:#9ca3af; text-align:center; padding:20px;">暂无通知记录</p>';
-        } else {
-          list.innerHTML = json.data.map(log => `
-            <div class="log-item ${log.status}">
-              <span class="time">${log.sent_at}</span>
-              <div><strong style="text-transform:uppercase; font-size:11px;">${log.channel}</strong> - ${log.status === 'success' ? '✓ 成功' : '✗ 失败'}</div>
-              ${log.error_message ? `<div style="color:#dc2626; font-size:12px; margin-top:4px;">${escapeHtml(log.error_message)}</div>` : ''}
-            </div>
-          `).join('');
-        }
+        allReminderLogs = json.data || [];
+        setPage('reminderLogs', 1);
+        renderReminderLogs(allReminderLogs);
         document.getElementById('logsModal').classList.add('active');
       } catch(e) { console.error(e); }
     }
