@@ -237,6 +237,59 @@ pm2 save
 - 启用/停用用户（停用后无法登录）
 - 删除用户（管理员账号不可删除）
 
+## API 接口
+
+所有 `/api` 接口（除 `/api/auth/*`）需要携带 Token 认证：
+
+```
+Authorization: Bearer <token>
+```
+
+### 认证相关
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | `/api/auth/login` | 登录 |
+| POST | `/api/auth/logout` | 退出登录 |
+| GET | `/api/auth/captcha` | 获取图形验证码 |
+| POST | `/api/auth/register` | 注册新账号 |
+| GET | `/api/auth/me` | 获取当前用户信息 |
+| PUT | `/api/auth/settings` | 修改用户名/密码 |
+
+### 提醒管理
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/reminders` | 获取提醒列表（支持按用户筛选） |
+| POST | `/api/reminders` | 创建提醒 |
+| PUT | `/api/reminders/:id` | 更新提醒 |
+| DELETE | `/api/reminders/:id` | 删除提醒 |
+| POST | `/api/reminders/:id/toggle` | 启用/暂停 |
+| POST | `/api/reminders/:id/fire` | 手动触发通知 |
+| GET | `/api/reminders/:id/logs` | 获取指定提醒的通知日志 |
+
+### 通知日志
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/logs` | 获取全部通知日志（按用户权限过滤） |
+
+### 用户管理（管理员）
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/users` | 获取用户列表 |
+| PUT | `/api/users/:id` | 更新用户信息 |
+| POST | `/api/users/:id/toggle-status` | 启用/停用用户 |
+| DELETE | `/api/users/:id` | 删除用户 |
+
+### 系统设置
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/settings` | 获取系统设置 |
+| PUT | `/api/settings` | 更新系统设置（管理员） |
+
 ## 项目结构
 
 ```
