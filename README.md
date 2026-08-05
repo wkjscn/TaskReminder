@@ -7,9 +7,9 @@
 - **提醒管理**：创建、编辑、克隆、删除、启用/暂停提醒事项
 - **定时通知**：按设定间隔（分钟/小时/天/月）自动检查并发送提醒
 - **多渠道通知**：Telegram Bot、邮件（SMTP）、飞书 Bot、Bark
-- **每个提醒独立配置**：可为每个提醒单独配置通知渠道，也可使用全局默认配置
-- **事项详细内容**：每条提醒支持填写详细说明，通知时会一并推送
-- **通知历史快照**：发送通知时快照标题和详情，后续编辑不影响历史记录
+- **每个提醒独立配置**：可为每个提醒单独配置通知渠道
+- **事项详细内容**：每条提醒支持填写详细说明
+- **通知历史快照**：发送通知时快照标题和详情
 - **通知日志**：记录每次通知发送结果，避免重复发送
 - **用户系统**：
   - 注册/登录，支持图形验证码
@@ -49,30 +49,9 @@
    # 服务端口
    PORT=3000
 
-   # 登录账号（首次启动自动创建，之后可通过设置页面修改）
+   # 管理员账号（首次启动自动创建，之后可通过设置页面修改）
    LOGIN_USERNAME=admin
    LOGIN_PASSWORD=admin123
-
-   # Telegram Bot 配置（可选）
-   TELEGRAM_BOT_TOKEN=
-   TELEGRAM_CHAT_ID=
-
-   # Email SMTP 配置（可选）
-   SMTP_HOST=
-   SMTP_PORT=465
-   SMTP_USER=
-   SMTP_PASS=
-   SMTP_FROM=
-   SMTP_TO=
-
-   # 飞书 Bot 配置（可选）
-   FEISHU_APP_ID=
-   FEISHU_APP_SECRET=
-   FEISHU_RECEIVE_ID=
-
-   # Bark 配置（可选）
-   BARK_URL=
-   ```
 
 2. **创建 docker-compose.yml**
 
