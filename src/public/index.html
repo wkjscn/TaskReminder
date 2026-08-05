@@ -1110,7 +1110,7 @@
           </div>
           <div class="card-body" style="padding: 24px;">
             <div class="form-group">
-              <label>系统时区</label>
+              <label>我的时区</label>
               <select id="timezoneSelect" style="max-width:300px;">
                 <option value="Asia/Shanghai">北京时间 (UTC+8)</option>
                 <option value="Asia/Tokyo">东京时间 (UTC+9)</option>
@@ -1588,8 +1588,10 @@
         const res = await fetch('/api/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
         const json = await res.json();
         if (json.success) {
-          // 先加载时区设置再显示页面，确保时间显示正确
-          await loadTimezone();
+          // 从 /me 接口获取用户个人时区设置
+          if (json.data.timezone) {
+            systemTimezone = json.data.timezone;
+          }
           showApp(json.data.username, json.data.role);
         } else {
           localStorage.removeItem('auth_token');
@@ -1778,11 +1780,7 @@
       await loadTimezone();
       const tzSelect = document.getElementById('timezoneSelect');
       tzSelect.value = systemTimezone;
-      // 非管理员禁用修改
-      const isAdmin = window.currentUserRole === 'admin';
-      tzSelect.disabled = !isAdmin;
-      const saveBtn = tzSelect.parentElement.parentElement.querySelector('button');
-      if (saveBtn) saveBtn.style.display = isAdmin ? '' : 'none';
+      tzSelect.disabled = false;
     }
 
     async function saveTimezoneBtn() {

@@ -268,21 +268,24 @@ router.delete('/users/:id', requireAdmin, (req, res) => {
 
 // ===== 系统设置 =====
 router.get('/settings', (req, res) => {
-  res.json({ success: true, data: { timezone: settingsRepository.getTimezone() } });
+  const userId = (req as any).user?.id;
+  const user = userRepository.getById(userId);
+  const timezone = user?.timezone || settingsRepository.getTimezone();
+  res.json({ success: true, data: { timezone } });
 });
 
-router.put('/settings', requireAdmin, (req, res) => {
+router.put('/settings', (req, res) => {
+  const userId = (req as any).user?.id;
   const { timezone } = req.body;
   if (!timezone || typeof timezone !== 'string') {
     return res.status(400).json({ success: false, error: '时区不能为空' });
   }
   try {
-    // 验证时区是否有效
     Intl.DateTimeFormat(undefined, { timeZone: timezone });
   } catch {
     return res.status(400).json({ success: false, error: '无效的时区' });
   }
-  settingsRepository.set('timezone', timezone);
+  userRepository.updateTimezone(userId, timezone);
   res.json({ success: true });
 });
 

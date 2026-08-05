@@ -121,6 +121,10 @@ if (!userColNames.includes('role')) {
 if (!userColNames.includes('status')) {
   db.exec("ALTER TABLE users ADD COLUMN status TEXT NOT NULL DEFAULT 'active'");
 }
+// 迁移: 为 users 表添加 timezone 列
+if (!userColNames.includes('timezone')) {
+  db.exec("ALTER TABLE users ADD COLUMN timezone TEXT NOT NULL DEFAULT 'Asia/Shanghai'");
+}
 
 // 迁移: 为 notification_log 表添加 title/description 列（记录发送时的快照）
 const logColumns = db.prepare("PRAGMA table_info(notification_log)").all() as { name: string }[];
@@ -345,6 +349,7 @@ export interface User {
   password: string;
   role: string;
   status: string;
+  timezone: string;
   created_at: string;
 }
 
@@ -379,6 +384,10 @@ export const userRepository = {
     if (status === 'disabled') {
       db.prepare('DELETE FROM sessions WHERE user_id = ?').run(id);
     }
+  },
+
+  updateTimezone(id: number, timezone: string): void {
+    db.prepare('UPDATE users SET timezone = ? WHERE id = ?').run(timezone, id);
   },
 
   count(): number {

@@ -194,7 +194,7 @@ authRouter.post('/register', (req, res) => {
 
 authRouter.get('/me', requireAuth, (req, res) => {
   const user = (req as any).user;
-  res.json({ success: true, data: { username: user.username, role: user.role } });
+  res.json({ success: true, data: { username: user.username, role: user.role, timezone: user.timezone } });
 });
 
 authRouter.put('/settings', requireAuth, (req, res) => {
