@@ -145,15 +145,16 @@ docker run -d \
    ```
 
    编辑 `.env` 文件
+   
    ```
    #服务端口
    PORT=3000
    #默认管理员账号密码
    LOGIN_USERNAME=admin
    LOGIN_PASSWORD=admin123
-  ```
+   ```
 
-4. **编译**
+4. **编译 **
 
    ```bash
    npm run build
