@@ -198,7 +198,7 @@ pm2 save
 
 1. 在 iPhone 上安装 [Bark](https://apps.apple.com/app/bark/id1403753865) App
 2. 打开 Bark 获取推送 URL（格式：`https://api.day.app/{device_key}`）
-3. 填入 `.env` 文件的 `BARK_URL` 或在新建提醒时填写
+3. 在新建提醒时填写
 4. 支持两种格式：
    - 完整 URL：`https://api.day.app/abc123`
    - 仅 device_key：`abc123`
