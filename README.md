@@ -144,7 +144,17 @@ docker run -d \
    cp .env.example .env
    ```
 
-   编辑 `.env` 文件。
+   编辑 `.env` 文件
+   ```
+   # 事项提醒系统 - 配置文件
+
+   # 服务端口
+   PORT=3000
+
+  # 登录账号（首次启动会自动创建用户，之后请通过设置页面修改）
+  LOGIN_USERNAME=admin
+  LOGIN_PASSWORD=admin123
+  ```
 
 4. **编译**
 
