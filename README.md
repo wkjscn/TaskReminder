@@ -176,7 +176,7 @@ pm2 save
 
 1. 在 Telegram 中搜索 `@BotFather`，发送 `/newbot` 创建机器人，获取 **Bot Token**
 2. 搜索 `@userinfobot`，获取你的 **Chat ID**
-3. 填入 `.env` 文件或在新建提醒时填写
+3. 在新建提醒时填写
 
 ### 邮件通知
 
@@ -184,15 +184,16 @@ pm2 save
 2. **Gmail**：需使用应用专用密码（非账号密码）
 3. **QQ 邮箱**：设置 → 账户 → 开启 SMTP，获取授权码
 4. **163 邮箱**：设置 → POP3/SMTP/IMAP → 开启，获取授权码
-5. 填入 `.env` 文件或在新建提醒时填写
+5. 在新建提醒时填写
 
 ### 飞书 Bot
 
 1. 访问 [飞书开放平台](https://open.feishu.cn/) 创建企业自建应用
 2. 开启「机器人」能力
-3. 添加权限：`im:message:send_as_bot`
-4. 获取 **App ID** 和 **App Secret**
-5. 获取接收者 **open_id**（通讯录中查看用户详情）
+3. 在「事件与回调 → 事件配置」中选择「使用长连接接收事件」
+4. 添加权限：`im:message:send_as_bot`
+5. 获取 **App ID** 和 **App Secret**
+6. 获取接收者 **open_id**（通讯录中查看用户详情）
 
 ### Bark
 
